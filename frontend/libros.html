@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biblioteca</title>
+  <link rel="stylesheet" href="./CSS/navbar.css" />
+  <link rel="stylesheet" href="./CSS/libros.css" />
+</head>
+<body class="pagina-libros">
+  <div id="navbar-container"></div>
+
+  <div class="libros-header">
+    <h1 class="libros-titulo">Biblioteca Digital</h1>
+    <div class="ordenar-container">
+      <label for="ordenar" class="ordenar-label">Ordenar por:</label>
+      <select id="ordenar" class="ordenar-select">
+        <option value="titulo">Título (A-Z)</option>
+        <option value="titulo-desc">Título (Z-A)</option>
+        <option value="reciente">Más recientes</option>
+        <option value="antiguo">Más antiguos</option>
+      </select>
+    </div>
+  </div>
+  
+  <main>
+    <div id="container-libros"></div>
+    <div id="cargando" class="mensaje-info">Cargando libros...</div>
+    <div id="error" class="mensaje-info" style="display: none;">Ocurrió un error al cargar los libros.</div>
+  </main>
+
+  <script src="JS/navbar.js"></script>
+  <script>
+    const API_BASE = "http://localhost:3002";
+    const portada_defecto = "./imagenes/portada_default.jpg";
+
+    let todosLibros = [];
+    let todosUsuarios = [];
+
+    async function obtenerLibros() {
+      try {
+        const libros  = await fetch(`${API_BASE}/aventura`);
+        const autores = await fetch(`${API_BASE}/usuario`);
+        const aventuras = await libros.json();
+        const usuarios = await autores.json();
+        console.log(aventuras);
+        console.log(usuarios);
+        todosLibros = aventuras;
+        todosUsuarios = usuarios;
+
+        mostrarLibros(aventuras, usuarios);
+      } catch (error) {
+        console.error("Algo salió mal!", error.message);
+        document.getElementById("error").style.display = "block";
+      } finally {
+        document.getElementById("cargando").style.display = "none";
+      }
+    }
+
+    function mostrarLibros(aventuras, usuarios) {
+      const container = document.getElementById("container-libros");
+      container.innerHTML = "";
+
+      aventuras.forEach((aventura) => {
+        const usuario = usuarios.find(u => u.id == aventura.id_usuario);
+        const nombreAutor = usuario ? usuario.nombre : "Autor desconocido";
+        const portada = aventura.portada || portada_defecto;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <img class="card-imagen" src="${portada}" alt="Portada de ${aventura.titulo}" />
+          <h3 class="card-titulo">${aventura.titulo}</h3>
+          <h4 class="card-autor">${nombreAutor}</h4>
+          <div class="card-actions">
+            <a class="btn-libros" href="./leer.html">
+              <span class="btn-icon">▶</span>
+              <span class="btn-text">Empezar a leer</span>
+            </a>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+    obtenerLibros();
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>LI-[INTER]</title>
+    <link rel="stylesheet" href="./CSS/navbar.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="./imagenes/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-izq">
+            <img src="./imagenes/logo.png" alt="Logo" class="logo" />
+        </div>
+
+        <div class="navbar-centro">
+            <a href="./index.html">Inicio</a>
+            <a href="./libros.html">Nuestros Libros</a>
+            <div class="desplegable">
+                <a class="desple-btn">Escribir</a>
+                <div class="desplegable-content">
+                    <a href="escribir.html">Nueva Historia</a>
+                    <a>Seguir escribiendo</a>
+                </div>
+            </div>
+            <a href="#sobreNosotros">Sobre Nosotros</a>
+        </div>
+
+        <div class="navbar-derecha">
+            <a href="./iniciar-sesion.html" class="btn btn-outline">Iniciar Sesión</a>
+            <a href="./registro.html" class="btn">Registrarse</a>
+        </div>
+        <div class="menu-toggle" id="menu-toggle">☰</div>
+    </header>
+    <script>
+    const toggle = document.getElementById('menu-toggle');
+    const centro = document.querySelector('.navbar-centro');
+    const derecha = document.querySelector('.navbar-derecha');
+
+    </script>
+    
+</body>
+</html>

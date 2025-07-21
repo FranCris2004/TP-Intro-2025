@@ -1,0 +1,195 @@
+{
+  "aventura": [
+    {
+      "id": 1,
+      "titulo": "A perdido en el Amazonas",
+      "id_usuario": 1,
+      "portada": "https://marketplace.canva.com/EAFpYu-k3tQ/2/0/1003w/canva-tapa-de-libro-de-terror-tipogr%C3%A1fico-blanco-y-negro-Lq-PT-PGQS8.jpg",
+      "descripcion": "Una historia donde cada elección cambia el destino.",
+      "f_creacion": "2024-07-01T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "titulo": "La mansión de las brujas",
+      "id_usuario": 1,
+      "portada": "",
+      "descripcion": "Te mudas a una casa antigua y debes enfrentarte a presencias oscuras.",
+      "f_creacion": "2024-07-05T14:30:00Z"
+    },
+    {
+      "id": 3,
+      "titulo": "Escape del ciberlaberinto",
+      "id_usuario": 2,
+      "portada": "https://imagessl2.casadellibro.com/a/l/s5/02/9788417858902.webp",
+      "descripcion": "Quedas atrapado en un juego de realidad virtual y cada decisión importa.",
+      "f_creacion": "2024-07-12T16:45:00Z"
+    },
+    {
+      "id": 4,
+      "titulo": "La sombra en el faro",
+      "id_usuario": 3,
+      "portada": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjmbptqIUr8JoNSB2c8z526qedsbUR6hW9hg&s",
+      "descripcion": "Un faro abandonado guarda secretos de otro mundo.",
+      "f_creacion": "2024-07-15T09:00:00Z"
+    }
+  ],
+  "usuario": [
+    {
+      "id": 1,
+      "nombre": "Stephen King",
+      "contraseña": "1234"
+    },
+    {
+      "id": 2,
+      "nombre": "Neil Gaiman",
+      "contraseña": "abcd"
+    },
+    {
+      "id": 3,
+      "nombre": "Agatha Christie",
+      "contraseña": "misterio"
+    }
+  ],
+  "pagina": [
+    {
+      "id": 1,
+      "id_aventura": 1,
+      "titulo": "Inicio",
+      "contenido": "Te despiertas en medio de la selva, solo, con una mochila.",
+      "imagen": "https://via.placeholder.com/300x400"
+    },
+    {
+      "id": 2,
+      "id_aventura": 1,
+      "titulo": "El río",
+      "contenido": "Llegas a un río caudaloso. Hay una canoa abandonada.",
+      "imagen": "https://via.placeholder.com/300x400"
+    },
+    {
+      "id": 3,
+      "id_aventura": 1,
+      "titulo": "Explorando la selva",
+      "contenido": "Decides adentrarte en la selva. Escuchas ruidos extraños.",
+      "imagen": "https://via.placeholder.com/300x400"
+    },
+    {
+      "id": 4,
+      "id_aventura": 1,
+      "titulo": "La canoa se hunde",
+      "contenido": "La canoa tenía una grieta. Te hundes lentamente en el agua.",
+      "imagen": "https://via.placeholder.com/300x400"
+    },
+    {
+      "id": 5,
+      "id_aventura": 1,
+      "titulo": "Regresas a casa",
+      "contenido": "Decides regresar. Alguien te encuentra y te ayuda a salir.",
+      "imagen": "https://via.placeholder.com/300x400"
+    },
+    {
+      "id": 6,
+      "id_aventura": 1,
+      "titulo": "Encuentras un refugio",
+      "contenido": "Descubres una cabaña abandonada en medio del bosque.",
+      "imagen": "https://via.placeholder.com/300x400"
+    },
+    {
+      "id": 7,
+      "id_aventura": 1,
+      "titulo": "Una serpiente",
+      "contenido": "Una serpiente venenosa te ataca. No puedes moverte.",
+      "imagen": "https://via.placeholder.com/300x400"
+    },
+    {
+      "id": 8,
+      "id_aventura": 1,
+      "titulo": "Ayuda inesperada",
+      "contenido": "Una tribu local te encuentra y te lleva a su aldea.",
+      "imagen": "https://via.placeholder.com/300x400"
+    },
+    {
+      "id": 9,
+      "id_aventura": 2,
+      "titulo": "La radio",
+      "contenido": "En la cabaña encuentras una radio que aún funciona.",
+      "imagen": "https://via.placeholder.com/300x400"
+    },
+    {
+      "id": 10,
+      "id_aventura": 2,
+      "titulo": "Rescate en camino",
+      "contenido": "Logras comunicarte. El rescate viene en camino.",
+      "imagen": "https://via.placeholder.com/300x400"
+    }
+  ],
+  "opcion": [
+    {
+      "id": 1,
+      "descripcion": "Caminar hacia el río",
+      "id_pagina_origen": 1,
+      "id_pagina_destino": 2
+    },
+    {
+      "id": 2,
+      "descripcion": "Volver a casa",
+      "id_pagina_origen": 1,
+      "id_pagina_destino": 5
+    },
+    {
+      "id": 3,
+      "descripcion": "Explorar la selva",
+      "id_pagina_origen": 1,
+      "id_pagina_destino": 3
+    },
+    {
+      "id": 4,
+      "descripcion": "Subirte a la canoa",
+      "id_pagina_origen": 2,
+      "id_pagina_destino": 4
+    },
+    {
+      "id": 5,
+      "descripcion": "Seguir la orilla",
+      "id_pagina_origen": 2,
+      "id_pagina_destino": 6
+    },
+    {
+      "id": 6,
+      "descripcion": "Escalar un árbol",
+      "id_pagina_origen": 3,
+      "id_pagina_destino": 7
+    },
+    {
+      "id": 7,
+      "descripcion": "Buscar señales humanas",
+      "id_pagina_origen": 3,
+      "id_pagina_destino": 8
+    },
+    {
+      "id": 8,
+      "descripcion": "Investigar la cabaña",
+      "id_pagina_origen": 2,
+      "id_pagina_destino": 9
+    },
+    {
+      "id": 9,
+      "descripcion": "Encender la radio",
+      "id_pagina_origen": 9,
+      "id_pagina_destino": 10
+    }
+  ],
+  "finales": [
+    { "id": 1, "id_pagina": 4 },
+    { "id": 2, "id_pagina": 5 },
+    { "id": 3, "id_pagina": 7 },
+    { "id": 4, "id_pagina": 8 },
+    { "id": 5, "id_pagina": 10 }
+  ],
+  "usuario_final": [
+    {
+      "id": 1,
+      "id_usuario": 1,
+      "id_final": 3
+    }
+  ]
+}

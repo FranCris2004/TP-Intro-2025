@@ -1,0 +1,179 @@
+.contenido{
+    display: flex;
+    gap: 15px;       
+    padding-inline: 50px;   
+}
+.barra-estado{
+    background-color: var(--morado);
+    flex: 1;
+}
+
+.textos {
+    background-color: var(--transparente); 
+    flex: 2;     
+    box-shadow: 0 6px 10px var(--negro-claro)      
+}
+.info{
+    text-align: center;
+    padding-inline: 2rem;
+    padding-block: 1rem;
+}
+h1{
+    text-shadow: 5px;
+    color: var(--morado);
+}
+h4{
+    color: var(--negro);
+    font-family: 'OpenSans-SemiBold', sans-serif;
+    font-size: 1rem;
+    font-weight: 200;
+    opacity: 0.6;
+}
+hr{
+    width: 80%; 
+    margin: 20px auto;
+    border: 0;
+    height: 1px;
+    background-color: var(--negro-claro);
+}
+p{
+    font-family: "Georgia", "Times New Roman"; 
+    font-size: 1.1rem;               
+    line-height: 1.6;            
+    text-align: justify;              /* Texto alineado a ambos márgenes*/
+    color: #333;              
+    text-indent: 1.5em;               /* Sangría en la primera línea */
+    margin-bottom: 0.5em;             /* Espacio entre párrafos (reemplaza el doble salto de línea) */
+    font-variant: small-caps;       
+    padding-inline: 3rem;
+    max-width: 45em;               
+}
+
+
+/* Estilos para la imagen centrada */
+.contenedor-imagen {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.ilustracion {
+  width: 400px; /* Tamaño predeterminado */
+  height: 300px; /* Tamaño predeterminado */
+  object-fit: cover; /* Mantiene la proporción de la imagen */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para las opciones */
+.opciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+  padding: 0 20px;
+}
+
+.opciones h3 {
+  color: var(--negro-claro);
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 10px;
+}
+
+.opciones .btn-opc {
+    display: block;
+    width: 100%;
+    max-width: 700px;
+    text-decoration: none;
+    background-color: var(--trasparente);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: 'Lato-Regular', sans-serif;
+    font-size: 1rem;
+    color: var(--negro-claro);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px var(--violeta);
+    text-align: center;
+}
+
+.opciones .btn-opc:hover {
+    background-color: var(--verde);
+    color: var(--blanco);
+    border: 1px solid var(--verde);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.portada-info{
+    display: flex;
+}
+.barra-portada{
+    width: 100%;
+    max-width: 160px;
+    aspect-ratio: 2 / 3;
+    border-radius: 5px;
+    object-fit: cover;
+    margin: 8px;
+}
+.info-libro{
+    display: block;
+    margin: 10px;
+}
+.barra-titulo{
+    color: var(--blanco);
+    font-family: 'OpenSans-SemiBold', sans-serif;
+    font-size: 1.5rem;
+}
+.barra-autor{
+    font-family: 'Lato-Regular', sans-serif;
+    font-size: 1rem;
+    color: var(--negro-claro);
+}
+.barra-subtitulo{
+    font-family: 'OpenSans-SemiBold', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 200;
+    padding-bottom: 1rem;
+    color: var(--blanco);
+    opacity: 0.9;
+}
+.barra-etiquetas{
+    display: block;
+    margin-inline: 18px;
+}
+.etiqueta{
+  text-decoration: none;
+  background-color: var(--trasparente);
+  color: var(--violeta);
+  border: 2px solid var(--violeta);
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+
+
+
+.btn-desplazamiento{
+    display: flex;
+    justify-content: space-between; /* Separa los elementos al máximo */
+    padding: 1rem;
+}
+.btn-desp{
+    text-decoration: none;
+    background-color: var(--trasparente);
+    color: var(--violeta);
+    border: 2px solid var(--violeta);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-desp:hover{
+  background-color: var(--violeta);
+  color: var(--blanco);
+  text-decoration: none;
+
+}

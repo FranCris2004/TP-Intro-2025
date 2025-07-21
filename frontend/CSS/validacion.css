@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url(../CSS/variables.css);
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--fondo-verde);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
+  margin: 0;
+  background-image: radial-gradient(circle at 10% 20%, rgba(253, 239, 239, 0.8) 0%, var(--fondo-1) 90%);
+}
+
+.container {
+  background-color: var(--blanco);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  width: 850px;
+  max-width: 95%;
+  min-height: 550px;
+}
+
+h1 {
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  color: var(--negro);
+  font-size: 2rem;
+  letter-spacing: -0.5px;
+}
+
+button {
+  margin-top: 1.5rem;
+  border-radius: 25px;
+  border: none;
+  background-color: var(--verde);
+  color: var(--blanco);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 14px 45px;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(59, 179, 113, 0.3);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 179, 113, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+form {
+  background-color: var(--blanco);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem 3rem;
+  height: 100%;
+  text-align: center;
+  border-radius: 10px;
+}
+
+input {
+  background-color: #f5f5f5;
+  border: 2px solid transparent;
+  padding: 14px 15px;
+  margin: 0.5rem 0;
+  width: 100%;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--verde);
+  background-color: var(--blanco);
+  box-shadow: 0 0 0 3px rgba(59, 179, 113, 0.2);
+}
+
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.validacion-container {
+  left: 0;
+  z-index: 2;
+}
+
+.form a:hover {
+  color: var(--naranja);
+  text-decoration: underline;
+}
+
+form p {
+  margin-top: 1.5rem;
+  color: var(--negro-claro);
+  font-size: 0.9rem;
+}
+
+form a {
+  color: var(--verde);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+form a:hover {
+  color: var(--naranja);
+  text-decoration: underline;
+}
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 100;
+}
+.overlay {
+  background: linear-gradient(to right, var(--verde), var(--verde-claro));
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: var(--blanco);
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+}
+
+@media (max-width:600px){
+	body{
+  		background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%);
+	}
+	.container{
+		width: 400px;
+	}
+	.form-container{
+		width: 100%;
+	}
+	.overlay{
+		display: none;
+	}
+}
