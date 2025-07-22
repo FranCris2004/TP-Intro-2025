@@ -30,62 +30,18 @@
   </main>
 
   <script src="JS/navbar.js"></script>
-  <script>
-    const API_BASE = "http://localhost:3002";
-    const portada_defecto = "./imagenes/portada_default.jpg";
+  <script type="module">
+    import { obtenerLibros, mostrarLibros } from "./JS/api-libros.js";
 
-    let todosLibros = [];
-    let todosUsuarios = [];
-
-    async function obtenerLibros() {
+    document.addEventListener("DOMContentLoaded", async () => {
       try {
-        const libros  = await fetch(`${API_BASE}/aventura`);
-        const autores = await fetch(`${API_BASE}/usuario`);
-        const aventuras = await libros.json();
-        const usuarios = await autores.json();
-        console.log(aventuras);
-        console.log(usuarios);
-        todosLibros = aventuras;
-        todosUsuarios = usuarios;
-
+        const { aventuras, usuarios } = await obtenerLibros();
         mostrarLibros(aventuras, usuarios);
-      } catch (error) {
-        console.error("Algo salió mal!", error.message);
-        document.getElementById("error").style.display = "block";
-      } finally {
-        document.getElementById("cargando").style.display = "none";
+      } catch (e) {
+        console.error("No se pudieron cargar los libros:", e);
       }
-    }
-
-    function mostrarLibros(aventuras, usuarios) {
-      const container = document.getElementById("container-libros");
-      container.innerHTML = "";
-
-      aventuras.forEach((aventura) => {
-        const usuario = usuarios.find(u => u.id == aventura.id_usuario);
-        const nombreAutor = usuario ? usuario.nombre : "Autor desconocido";
-        const portada = aventura.portada || portada_defecto;
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        card.innerHTML = `
-          <img class="card-imagen" src="${portada}" alt="Portada de ${aventura.titulo}" />
-          <h3 class="card-titulo">${aventura.titulo}</h3>
-          <h4 class="card-autor">${nombreAutor}</h4>
-          <div class="card-actions">
-            <a class="btn-libros" href="./leer.html">
-              <span class="btn-icon">▶</span>
-              <span class="btn-text">Empezar a leer</span>
-            </a>
-          </div>
-        `;
-
-        container.appendChild(card);
-      });
-    }
-    obtenerLibros();
-  </script> 
+    });
+  </script>
 
 </body>
 </html>

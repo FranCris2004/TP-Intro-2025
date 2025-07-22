@@ -1,5 +1,5 @@
 // JS/api-libros.js
-const API_BASE = "http://localhost:3002";
+const API_BASE = "http://localhost:3002/v1";
 const portada_defecto = "../imagenes/portada_default.jpg";
 
 async function obtenerLibros() {
@@ -27,12 +27,12 @@ async function obtenerLibros() {
   }
 }
 
-async function crearLibro(libroData) {
+async function crearLibro(infoLibro) {
   try {
     const response = await fetch(`${API_BASE}/aventuras`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(libroData),
+      body: JSON.stringify(infoLibro),
     });
 
     if (!response.ok) throw new Error("Error al crear el libro");
@@ -46,12 +46,12 @@ async function crearLibro(libroData) {
   }
 }
 
-async function actualizarLibro(id, libroData) {
+async function actualizarLibro(id, infoLibro) {
   try {
     const response = await fetch(`${API_BASE}/aventuras/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(libroData),
+      body: JSON.stringify(infoLibro),
     });
 
     if (!response.ok) throw new Error("Error al actualizar el libro");
@@ -76,7 +76,7 @@ async function eliminarLibro(id) {
     console.log(`Libro con ID ${id} eliminado correctamente`);
     return true;
   } catch (error) {
-    console.error("Error al tratar de eliminar el libro:", error.message);
+    console.error("Error al tratar de eliminar el libro: ", error.message);
     throw error;
   }
 }
@@ -107,6 +107,25 @@ function mostrarLibros(aventuras, usuarios) {
 
     container.appendChild(card);
   });
+}
+
+async function crearUsuario(infoUsuario) {
+  try {
+    const response = await fetch(`${API_BASE}/usuarios`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(infoUsuario),
+    });
+
+    if (!response.ok) throw new Error("Error al crear nuevo usuario");
+
+    const nuevoUsuario = await response.json();
+    console.log("Usuario creado:", nuevoUsuario);
+    return nuevoUsuario;
+  } catch (error) {
+    console.error("Error al crear nuevo usuario:", error.message);
+    throw error;
+  }
 }
 
 export { obtenerLibros, mostrarLibros, actualizarLibro, eliminarLibro, crearLibro, portada_defecto };
