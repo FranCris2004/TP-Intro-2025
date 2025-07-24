@@ -1,5 +1,6 @@
 import { Router } from "express";
 import usuario_service from "../services/usuario_service.js";
+import pagina_service from "../services/pagina_service.js";
 
 const router = Router();
 
@@ -40,11 +41,9 @@ router.get("/:id_usuario", async (req, res) => {
     console.log("Method: GET\nURI: /v1/usuario/:id_usuario");
 
     const { id } = res.params;
-
     console.log(`id_usuario: ${id}`);
 
     const usuario = await usuario_service.getUsuarioById(id);
-
     console.log(`Response: ${usuario}`);
 
     res.status(200).send(usuario);
@@ -55,7 +54,21 @@ router.get("/:id_usuario", async (req, res) => {
 
 // GET /v1/usuario/:id_usuario/finales
 router.get("/:id_usuario/finales", async (req, res) => {
-  res.status(501).send("Error al obtener los finales que completo el usuario");
+  try {
+    console.log("Method: GET\nURI: /v1/usuario/:id_usuario/finales");
+
+    const id_usuario = req.params.id_usuario;
+    console.log(`id_usuario: ${id}`);
+
+    const finales = await pagina_service.getAllPaginasFinalesByUsuarioId(
+      id_usuario
+    );
+    console.log(`Response: ${finales}`);
+
+    res.status(200).send(finales);
+  } catch (error) {
+    res.status(500).send("Error al obtener los finales del usuario");
+  }
 });
 
 // PUT /v1/usuario/:id_usuario
