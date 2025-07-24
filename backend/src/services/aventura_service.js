@@ -78,19 +78,19 @@ async function updateAventuraById(id, titulo = null, descripcion = null, autor_i
       throw new Error("ID de la aventura invalida");
 
     if (titulo)
-      conn.query("UPDATE aventura SET titulo = $2 WHERE id = $1", [id, titulo]);
+      await conn.query("UPDATE aventura SET titulo = $2 WHERE id = $1", [id, titulo]);
    
     if (descripcion)
-      conn.query("UPDATE aventura SET descripcion= $2 WHERE id = $1", [id, descripcion]);
+      await conn.query("UPDATE aventura SET descripcion= $2 WHERE id = $1", [id, descripcion]);
  
     if (autor_id)
-      conn.query("UPDATE aventura SET autor_id = $2 WHERE id = $1", [id, autor_id]);
+      await conn.query("UPDATE aventura SET autor_id = $2 WHERE id = $1", [id, autor_id]);
 
     if (genero)
-      conn.query("UPDATE aventura SET genero = $2 WHERE id = $1", [id, genero]);
+      await conn.query("UPDATE aventura SET genero = $2 WHERE id = $1", [id, genero]);
 
     if (portada)
-      conn.query("UPDATE aventura SET portada = $2 WHERE id = $1", [id, portada]);
+      await conn.query("UPDATE aventura SET portada = $2 WHERE id = $1", [id, portada]);
 
     return getAventuraById(id);
   } catch (error) {

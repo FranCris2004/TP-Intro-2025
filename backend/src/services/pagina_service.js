@@ -95,16 +95,16 @@ async function updatePaginaById(
     if (validateIdPagina(id) == false) throw new Error("Pagina no encontrado");
 
     if (titulo)
-      conn.query("UPDATE pagina SET titulo = $2 WHERE id = $1", [id, titulo]);
+      await conn.query("UPDATE pagina SET titulo = $2 WHERE id = $1", [id, titulo]);
 
     if (contenido)
-      conn.query("UPDATE pagina SET contenido = $2 WHERE id = $1", [
+      await conn.query("UPDATE pagina SET contenido = $2 WHERE id = $1", [
         id,
         contenido,
       ]);
 
     if (imagen)
-      conn.query("UPDATE pagina SET imagen = $2 WHERE id = $1", [id, imagen]);
+      await conn.query("UPDATE pagina SET imagen = $2 WHERE id = $1", [id, imagen]);
 
     return getPaginaById(id);
   } catch (error) {
