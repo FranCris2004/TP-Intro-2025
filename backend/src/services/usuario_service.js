@@ -8,11 +8,11 @@ async function getAllUsuarios() {
     return res.rows.map(
       (row) =>
         new Usuario(
-          res.rows[0].id,
-          res.rows[0].nombre,
-          res.rows[0].email,
-          res.rows[0].fecha_registro,
-          res.rows[0].fecha_de_nacimiento
+          row.id,
+          row.nombre,
+          row.email,
+          row.fecha_registro,
+          row.fecha_de_nacimiento
         )
     );
   } catch (error) {
