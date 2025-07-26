@@ -2,6 +2,49 @@ import conn from "./db_connection.js";
 import Pagina from "../models/pagina.js";
 import Opcion from "../models/opcion.js";
 
+//
+// Create
+//
+
+async function createPagina(
+  titulo,
+  id_aventura,
+  contenido,
+  imagen
+) {
+  try {
+    if (!id_aventura) throw new Error("El id de la aventura es invalido");
+
+    if (titulo === "") throw new Error("El titulo debe ser un string no vacio");
+
+    if (contenido === "")
+      throw new Error("El contenido debe ser un string no vacio");
+
+    if (imagen === "")
+      throw new Error("Imagen inválida: debe ser string o null");
+
+    const res = await conn.query(
+      "INSERT INTO paginas (id_aventura, titulo, contenido, imagen) VALUES ($1, $2, $3, $4) RETURNING *",
+      [id_aventura, titulo, contenido, imagen]
+    );
+    return new Pagina(
+      res.rows[0].id,
+      res.rows[0].numero,
+      res.rows[0].titulo,
+      res.rows[0].id_aventura,
+      res.rows[0].contenido,
+      res.rows[0].imagen
+    );
+  } catch (error) {
+    console.error("Error en createPagina:", error);
+    throw error;
+  }
+}
+
+//
+// Read
+//
+
 async function getPaginaById(id) {
   try {
     const res = await conn.query("SELECT * FROM pagina WHERE id = $1", [id]);
@@ -41,40 +84,37 @@ async function getPaginaByNumero(id_aventura, numero) {
   }
 }
 
-async function createPagina(
-  titulo,
-  id_aventura,
-  contenido,
-  imagen
-) {
+async function getAllPaginasFinalesByUsuarioId(id_usuario) {
   try {
-    if (!id_aventura) throw new Error("El id de la aventura es invalido");
-
-    if (titulo === "") throw new Error("El titulo debe ser un string no vacio");
-
-    if (contenido === "")
-      throw new Error("El contenido debe ser un string no vacio");
-
-    if (imagen === "")
-      throw new Error("Imagen inválida: debe ser string o null");
-
     const res = await conn.query(
-      "INSERT INTO paginas (id_aventura, titulo, contenido, imagen) VALUES ($1, $2, $3, $4) RETURNING *",
-      [id_aventura, titulo, contenido, imagen]
+      `
+      SELECT p.* FROM pagina p
+      JOIN finales f ON p.id = f.id_pagina
+      JOIN usuario_final uf ON uf.id_final = f.id
+      WHERE uf.id_usuario = $1
+      `,
+      [id_usuario]
     );
-    return new Pagina(
-      res.rows[0].id,
-      res.rows[0].numero,
-      res.rows[0].titulo,
-      res.rows[0].id_aventura,
-      res.rows[0].contenido,
-      res.rows[0].imagen
+
+    return res.rows.map(
+      async (row) =>
+        new Pagina(
+          row.id,
+          row.id_aventura,
+          row.titulo,
+          row.contenido,
+          row.imagen,
+        )
     );
   } catch (error) {
-    console.error("Error en createPagina:", error);
+    console.error("Error en getAllPaginasFinalesByUsuarioId:", error);
     throw error;
   }
 }
+
+//
+// Update
+//
 
 async function validateIdPagina(id) {
   return (
@@ -153,7 +193,9 @@ async function updatePaginaByNumero(id_aventura, numero, titulo = null, contenid
   }
 }
 
-
+//
+// Delete
+//
 
 async function deletePaginaById(id) {  
   try {
@@ -185,42 +227,13 @@ async function deletePaginaByNumero(id_aventura, numero) {
   }
 }
 
-
-async function getAllPaginasFinalesByUsuarioId(id_usuario) {
-  try {
-    const res = await conn.query(
-      `
-      SELECT p.* FROM pagina p
-      JOIN finales f ON p.id = f.id_pagina
-      JOIN usuario_final uf ON uf.id_final = f.id
-      WHERE uf.id_usuario = $1
-      `,
-      [id_usuario]
-    );
-
-    return res.rows.map(
-      async (row) =>
-        new Pagina(
-          row.id,
-          row.id_aventura,
-          row.titulo,
-          row.contenido,
-          row.imagen,
-        )
-    );
-  } catch (error) {
-    console.error("Error en getAllPaginasFinalesByUsuarioId:", error);
-    throw error;
-  }
-}
-
 export default {
+  createPagina,
   getPaginaById,
   getPaginaByNumero,
-  createPagina,
+  getAllPaginasFinalesByUsuarioId,
   updatePaginaById,
   updatePaginaByNumero,
   deletePaginaById,
-  deletePaginaByNumero,
-  getAllPaginasFinalesByUsuarioId
+  deletePaginaByNumero
 };
