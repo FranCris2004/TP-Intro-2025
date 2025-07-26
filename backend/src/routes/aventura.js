@@ -10,6 +10,15 @@ router.post("/", async (req, res) => {
   try {
     console.log("Method: POST\nURI: /v1/aventura");
 
+    const auth = req.body.auth;
+    if (
+      !(await usuario_service.validateContrasenia(auth.id, auth.contrasenia))
+    ) {
+      console.log("No autorizado");
+      res.status(401).send("Unauthorized");
+    }
+    console.log("Autorizado");
+
     const { titulo, descripcion, autor_id, genero } = req.body;
     console.log(
       `
@@ -20,7 +29,7 @@ router.post("/", async (req, res) => {
       `
     );
 
-    const nueva_aventura = aventura_service.createAventura(
+    const nueva_aventura = await aventura_service.createAventura(
       titulo,
       descripcion,
       autor_id,
@@ -38,6 +47,15 @@ router.post("/", async (req, res) => {
 router.post("/:id_aventura/pagina", async (req, res) => {
   try {
     console.log("Method: POST\nURI: /v1/aventura/:id_aventura/pagina");
+
+    const auth = req.body.auth;
+    if (
+      !(await usuario_service.validateContrasenia(auth.id, auth.contrasenia))
+    ) {
+      console.log("No autorizado");
+      res.status(401).send("Unauthorized");
+    }
+    console.log("Autorizado");
 
     const { id_aventura, titulo, contenido, imagen, imagen_de_fondo } =
       req.body;
@@ -72,6 +90,15 @@ router.post("/:id_aventura/:numero_pagina/opcion", async (req, res) => {
     console.log(
       "Method: POST\nURI: /v1/aventura/:id_aventura/:numero_pagina/opcion"
     );
+
+    const auth = req.body.auth;
+    if (
+      !(await usuario_service.validateContrasenia(auth.id, auth.contrasenia))
+    ) {
+      console.log("No autorizado");
+      res.status(401).send("Unauthorized");
+    }
+    console.log("Autorizado");
 
     const id_aventura = req.params.id_aventura;
     console.log(`id_aventura: ${id_aventura}`);
@@ -187,14 +214,20 @@ router.delete("/:id_aventura", async (req, res) => {
   try {
     console.log(`Method: DELETE\nURI: /v1/aventura/:id_aventura`);
 
+    const auth = req.body.auth;
+    if (
+      !(await usuario_service.validateContrasenia(auth.id, auth.contrasenia))
+    ) {
+      console.log("No autorizado");
+      res.status(401).send("Unauthorized");
+    }
+    console.log("Autorizado");
+
     const id_aventura = req.params.id_aventura;
     console.log(`id_aventura: ${id_aventura}`);
 
-    if (aventura_service.deleteAventuraById(id_aventura)) {
-      res.status(200).send("OK");
-    } else {
-      res.status(401).send("Unauthorized");
-    }
+    await aventura_service.deleteAventuraById(id_aventura);
+    res.status(200).send("OK");
   } catch (error) {
     res.status(500).send("Error al eliminar la aventura");
   }
@@ -207,17 +240,23 @@ router.delete("/:id_aventura/:numero_pagina", async (req, res) => {
       `Method: DELETE\nURI: /v1/aventura/:id_aventura/:numero_pagina`
     );
 
+    const auth = req.body.auth;
+    if (
+      !(await usuario_service.validateContrasenia(auth.id, auth.contrasenia))
+    ) {
+      console.log("No autorizado");
+      res.status(401).send("Unauthorized");
+    }
+    console.log("Autorizado");
+
     const id_aventura = req.params.id_aventura;
     console.log(`id_aventura: ${id_aventura}`);
 
     const numero_pagina = req.params.numero_pagina;
     console.log(`numero_pagina: ${numero_pagina}`);
 
-    if (pagina_service.deletePaginaByNumero(id_aventura, numero_pagina)) {
-      res.status(200).send("OK");
-    } else {
-      res.status(401).send("Unauthorized");
-    }
+    await pagina_service.deletePaginaByNumero(id_aventura, numero_pagina);
+    res.status(200).send("OK");
   } catch (error) {
     res.status(500).send("Error al eliminar la pagina");
   }
@@ -230,25 +269,31 @@ router.delete("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
       `Method: DELETE\nURI: /v1/aventura/:id_aventura/:numero_pagina/:id_opcion`
     );
 
-    const id_aventura = req.params.id_aventura;
-    console.log(`id_aventura: ${id_aventura}`);
-
-    const numero_pagina = req.params.numero_pagina;
-    console.log(`numero_pagina: ${numero_pagina}`);
-
-    const id_opcion = req.params.id_opcion;
-    console.log(`id_opcion: ${id_opcion}`);
+    const auth = req.body.auth;
+    if (
+      !(await usuario_service.validateContrasenia(auth.id, auth.contrasenia))
+    ) {
+      console.log("No autorizado");
+      res.status(401).send("Unauthorized");
+    }
+    console.log("Autorizado");
 
     // id_aventura y numero_pagina no se usan realmente
     // estan en la URI por un error de diseño
     // se pueden rellenar con cualquier numero
     // e igual funcionaria para la misma opcion
 
-    if (opcion_service.deleteOpcionById(id_opcion)) {
-      res.status(200).send("OK");
-    } else {
-      res.status(401).send("Unauthorized");
-    }
+    // const id_aventura = req.params.id_aventura;
+    // console.log(`id_aventura: ${id_aventura}`);
+
+    // const numero_pagina = req.params.numero_pagina;
+    // console.log(`numero_pagina: ${numero_pagina}`);
+
+    const id_opcion = req.params.id_opcion;
+    console.log(`id_opcion: ${id_opcion}`);
+
+    await opcion_service.deleteOpcionById(id_opcion);
+    res.status(200).send("OK");
   } catch (error) {
     res.status(500).send("Error al eliminar la opcion");
   }
