@@ -84,14 +84,11 @@ async function getAllUsuarios() {
   }
 }
 
-async function getUsuarioById(id, contrasenia) {
+async function getUsuarioById(id) {
   try {
     const res = await conn.query("SELECT * FROM usuario WHERE id = $1", [id]);
 
     if (res.rowCount === 0) throw new Error("Usuario no encontrado");
-
-    if (res.row[0].contrasenia !== contrasenia)
-      throw new Error("Contrasenia incorrecta");
 
     return new Usuario(
       res.rows[0].id,
@@ -112,10 +109,10 @@ async function getUsuarioById(id, contrasenia) {
 
 async function updateUsuarioById(
   id,
-  nombre = null,
-  contrasenia = null,
-  email = null,
-  fecha_de_nacimiento = null
+  nombre,
+  contrasenia,
+  email,
+  fecha_de_nacimiento
 ) {
   try {
     if (!id) throw new Error("ID de usuario requerido");
@@ -146,6 +143,8 @@ async function updateUsuarioById(
         "UPDATE usuario SET fecha_nacimiento = $2 WHERE id = $1",
         [id, fecha_nacimiento]
       );
+
+    return await getUsuarioById(id);
   } catch (error) {
     console.error("Error en updateUsuarioById:", error);
     throw error;
