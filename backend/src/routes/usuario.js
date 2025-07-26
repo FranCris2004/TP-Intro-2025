@@ -89,7 +89,6 @@ router.put("/:id_usuario", async (req, res) => {
     console.log(`id_usuario: ${id_usuario}`);
 
     const {
-      contrasenia,
       nueva_contrasenia,
       nombre,
       email,
@@ -97,7 +96,7 @@ router.put("/:id_usuario", async (req, res) => {
     } = req.body;
 
     const usuario_actualizado = await usuario_service.updateUsuarioById(
-      id,
+      id_usuario,
       nombre || null,
       nueva_contrasenia || null,
       email || null,
@@ -130,8 +129,6 @@ router.delete("/:id_usuario", async (req, res) => {
 
     const id_usuario = req.params.id_usuario;
     console.log(`id_usuario: ${id_usuario}`);
-
-    const contrasenia = req.body.contrasenia;
 
     await usuario_service.deleteUsuarioById(id_usuario);
 
