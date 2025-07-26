@@ -1,7 +1,6 @@
 import { Router } from "express";
 import usuario_service from "../services/usuario_service.js";
 import pagina_service from "../services/pagina_service.js";
-import Usuario from "../models/usuario.js";
 
 const router = Router();
 
@@ -135,7 +134,7 @@ router.delete("/:id_usuario", async (req, res) => {
     const contrasenia = req.body.contrasenia;
 
     await usuario_service.deleteUsuarioById(id_usuario);
-    
+
     res.status(200).send("OK");
   } catch (error) {
     res.status(500).send("Error al eliminar el usuario");
