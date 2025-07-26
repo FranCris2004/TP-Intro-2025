@@ -2,16 +2,22 @@
     display: flex;
     gap: 15px;       
     padding-inline: 50px;   
+    padding-top: 20px;
 }
 .barra-estado{
-    background-color: var(--morado);
+    background-color: var(--verde);
     flex: 1;
+    height: 580px;
+    border-radius: 5px;
 }
 
 .textos {
     background-color: var(--transparente); 
-    flex: 2;     
-    box-shadow: 0 6px 10px var(--negro-claro)      
+    flex: 2;
+    box-shadow: 0 6px 10px var(--negro-claro);
+    max-width: 900px;  
+    width: 100%;
+    margin: 0 auto;     
 }
 .info{
     text-align: center;
@@ -20,7 +26,7 @@
 }
 h1{
     text-shadow: 5px;
-    color: var(--morado);
+    color: var(--verde);
 }
 h4{
     color: var(--negro);
@@ -37,16 +43,14 @@ hr{
     background-color: var(--negro-claro);
 }
 p{
-    font-family: "Georgia", "Times New Roman"; 
-    font-size: 1.1rem;               
-    line-height: 1.6;            
+    font-size: 1rem;               
+    line-height: 1.4;            
     text-align: justify;              /* Texto alineado a ambos márgenes*/
-    color: #333;              
+    color: var(--negro-a);              
     text-indent: 1.5em;               /* Sangría en la primera línea */
-    margin-bottom: 0.5em;             /* Espacio entre párrafos (reemplaza el doble salto de línea) */
-    font-variant: small-caps;       
+    margin-bottom: 0.5em;          
     padding-inline: 3rem;
-    max-width: 45em;               
+    max-width: 55rem;                             
 }
 
 
@@ -65,7 +69,6 @@ p{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos para las opciones */
 .opciones {
   display: flex;
   flex-direction: column;
@@ -77,33 +80,16 @@ p{
 
 .opciones h3 {
   color: var(--negro-claro);
-  font-family: 'Poppins', sans-serif;
   margin-bottom: 10px;
 }
 
-.opciones .btn-opc {
-    display: block;
+.btn-opc {
     width: 100%;
     max-width: 700px;
-    text-decoration: none;
-    background-color: var(--trasparente);
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-family: 'Lato-Regular', sans-serif;
-    font-size: 1rem;
     color: var(--negro-claro);
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px var(--violeta);
-    text-align: center;
+    font-size: 1rem;
 }
 
-.opciones .btn-opc:hover {
-    background-color: var(--verde);
-    color: var(--blanco);
-    border: 1px solid var(--verde);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
 
 .portada-info{
     display: flex;
@@ -152,28 +138,8 @@ p{
   font-size: 14px;
 }
 
-
-
-
 .btn-desplazamiento{
     display: flex;
     justify-content: space-between; /* Separa los elementos al máximo */
     padding: 1rem;
-}
-.btn-desp{
-    text-decoration: none;
-    background-color: var(--trasparente);
-    color: var(--violeta);
-    border: 2px solid var(--violeta);
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.btn-desp:hover{
-  background-color: var(--violeta);
-  color: var(--blanco);
-  text-decoration: none;
-
 }

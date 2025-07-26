@@ -4,7 +4,7 @@ FROM node:lts-alpine3.22
 WORKDIR /api
 
 # al instalar la imagen copia los archivos de npm e instala los paquetes
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 
 # copia los archivos restantes

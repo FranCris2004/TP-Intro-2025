@@ -1,46 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>LI-[INTER]</title>
-    <link rel="stylesheet" href="./CSS/navbar.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" href="./imagenes/logo.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LI-[INTER]</title>
+  <link rel="stylesheet" href="./CSS/base.css" />
+  <link rel="stylesheet" href="./CSS/navbar.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" href="./imagenes/favicon.svg" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar">
-        <div class="navbar-izq">
-            <img src="./imagenes/logo.png" alt="Logo" class="logo" />
-        </div>
+  <header class="navbar">
+    <div class="navbar-izq">
+      <img class="logo" src="./imagenes/favicon.svg" alt="Logo">
+      <a class="logo-texto font-Montserrat">RAMTORIA</a>
+    </div>
 
-        <div class="navbar-centro">
-            <a href="./index.html">Inicio</a>
-            <a href="./libros.html">Nuestros Libros</a>
-            <div class="desplegable">
-                <a class="desple-btn">Escribir</a>
-                <div class="desplegable-content">
-                    <a href="escribir.html">Nueva Historia</a>
-                    <a>Seguir escribiendo</a>
-                </div>
-            </div>
-            <a href="#sobreNosotros">Sobre Nosotros</a>
+    <div class="navbar-centro">
+      <a href="./index.html">Inicio</a>
+      <a href="./libros.html">Biblioteca</a>
+      <div class="desplegable" id="menuEscribir">
+        <a class="desple-btn">Escribir <span class="material-symbols-outlined">stat_minus_1</span></a>
+        <div class="desplegable-content">
+          <a href="escribir.html" class="nueva-historia-link">
+            <span class="material-symbols-outlined">border_color</span> Nueva Historia</a>
+          <a href="mis-historias.html" class="seguir-escribiendo">
+            <span class="material-symbols-outlined">newsstand</span> Seguir escribiendo</a>
         </div>
+      </div>
+    </div>
 
-        <div class="navbar-derecha">
-            <a href="./iniciar-sesion.html" class="btn btn-outline">Iniciar Sesión</a>
-            <a href="./registro.html" class="btn">Registrarse</a>
+    <div class="navbar-derecha">
+      <div id="btnValidacion">
+        <a href="validacion.html?form=login" class="btn gr btn-transparente verde-invertido-sb sb-verde btn-sb-navbar">Iniciar Sesión</a>
+        <a href="validacion.html?form=registro" class="btn gr btn-verde sb-verde btn-sb-navbar">Registrarse</a>
+      </div>
+      <div id="userSection" style="display: none;">
+        <div class="user-dropdown">
+          <button class="user-btn">
+            <span id="usernameDisplay"></span>
+            <span class="material-symbols-outlined">arrow_drop_down</span>
+          </button>
+          <div class="user-dropdown-content">
+            <a href="#" id="logoutBtn">
+              <span class="material-symbols-outlined">logout</span> Cerrar sesión</a>
+            <hr>
+            <a href="#" id="deleteAccountBtn">
+              <span class="material-symbols-outlined">delete_forever</span> Borrar Cuenta</a>
+          </div>
         </div>
-        <div class="menu-toggle" id="menu-toggle">☰</div>
-    </header>
-    <script>
-    const toggle = document.getElementById('menu-toggle');
-    const centro = document.querySelector('.navbar-centro');
-    const derecha = document.querySelector('.navbar-derecha');
+      </div>
+    </div>
+  </header>
 
-    </script>
-    
+  <script>
+  function mostrarUsuario() {
+    const user = JSON.parse(localStorage.getItem('usuario'));
+    console.log("Usuario cargado:", user);
+    const btnValidacion = document.getElementById('btnValidacion');
+    const userSection = document.getElementById('userSection');
+    const menuEscribir = document.getElementById('menuEscribir');
+
+    if (user) {
+      btnValidacion.style.display = 'none';
+      userSection.style.display = 'flex';
+      menuEscribir.style.display = 'block';
+      document.getElementById('usernameDisplay').textContent = user.nombre;
+
+      // 💡 Ahora que los elementos están visibles, los seleccionamos
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('usuario');
+          mostrarUsuario(); // refresca la UI
+          window.location.href = 'index.html';
+        });
+      }
+
+      const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+      if (deleteAccountBtn) {
+        deleteAccountBtn.addEventListener('click', () => {
+          const confirmacion = confirm("¡Cuidado!\nSi borrás tu cuenta, también se eliminarán todas tus historias.\n¿Estás segura/o?");
+          if (confirmacion) {
+            localStorage.removeItem('usuario');
+            alert("Tu cuenta fue eliminada.");
+            window.location.href = 'index.html';
+          }
+        });
+      }
+
+    } else {
+      btnValidacion.style.display = 'flex';
+      userSection.style.display = 'none';
+      menuEscribir.style.display = 'flex';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', mostrarUsuario);
+
+
+  </script>
 </body>
 </html>

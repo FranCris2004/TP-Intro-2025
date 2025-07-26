@@ -1,0 +1,79 @@
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login / Registro</title>
+    <link rel="stylesheet" href="CSS/base.css" />
+    <link rel="stylesheet" href="./CSS/validacion.css" />
+    <style>
+        .form-container { 
+            display: none;  /* Oculta todos los formularios por defecto */ 
+        }
+        .form-container.active { 
+            display: block; /* Muestra solo el formulario con clase "active" */ 
+        }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+        <div id="form-login" class="form-container validacion-container active">
+        <form action="#">
+            <h1>Iniciar Sesión</h1>
+            <input id="usuario-login" type="text" placeholder="Usuario" />
+            <input id="contraseña-login" type="password" placeholder="Contraseña" />
+            <button type="submit">Iniciar Sesión</button>
+            <p>¿No tienes una cuenta? <a href="#" onclick="mostrarFormulario('registro')">Regístrate</a></p>
+        </form>
+        </div>
+
+        <div id="form-registro" class="form-container validacion-container">
+        <form action="#">
+            <h1>Crea tu cuenta</h1>
+            <input id="usuario-registro" type="text" placeholder="Nombre de usuario" />
+            <input id="contraseña-registro" type="password" placeholder="Contraseña" />
+            <input id="validar-contraseña" type="password" placeholder="Confirmar contraseña" />
+            <button type="submit">Crear cuenta</button>
+        </form>
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay"></div>
+        </div>
+    </div>
+
+    <script>
+    function mostrarFormulario(tipo) {
+        const login = document.getElementById('form-login');
+        const registro = document.getElementById('form-registro');
+
+        if (tipo === 'login') {
+        login.classList.add('active'); /*Añade una clase CSS (active) al elemento (login).*/
+        registro.classList.remove('active'); /*Elimina una clase CSS (active) del elemento (registro).*/
+        } else if (tipo === 'registro') {
+        login.classList.remove('active');
+        registro.classList.add('active');
+        } else {
+        // Por defecto mostrar login
+        login.classList.add('active');
+        registro.classList.remove('active');
+        }
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    /* window.location.search -> Obtiene la parte de la URL después del ? (query string).
+    new URLSearchParams -> Crea un objeto especial que convierte el query string en una estructura manipulable.
+    urlParams ahora es un objeto que representa:
+    { "form" => "registro"}
+    */
+    const form = urlParams.get('form'); 
+    /*
+    urlParams.get('clave'):
+    Busca el valor del parámetro 'form' en la URL.
+    Si existe: Retorna su valor (ej: "registro").
+    Si no existe: Retorna null
+    */
+    mostrarFormulario(form);
+    </script>
+
+    </body>
+    </html>

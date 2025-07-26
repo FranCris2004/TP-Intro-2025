@@ -1,0 +1,68 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px; 
+}
+body.pagina-clara {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.contenido {
+  width: 90%;
+  max-width: 1200px; 
+  margin: 20px auto; 
+  padding: 20px;
+}
+.historias{
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+}
+.historia {
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between; 
+  align-items: flex-start; 
+  gap: 20px; 
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.contenido-izq {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  flex-grow: 1; 
+}
+
+.rel-portada {
+  flex-shrink: 0; 
+}
+
+.datos {
+  flex-grow: 1;
+}
+
+.card-titulo {
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+}
+
+.card-autor {
+  margin: 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+.botones {
+  display: flex;
+  gap: 1rem; 
+  align-items: center; 
+}
+
+
+
+

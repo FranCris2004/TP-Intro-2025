@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis historias</title>
+    <link rel="stylesheet" href="./CSS/navbar.css" />
+    <link rel="stylesheet" href="./CSS/mis-historias.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="pagina-clara">
+    <div id="navbar-container"></div>
+    <div class="contenido">
+      <div class="header">
+        <h2 class="gr font-Montserrat">Mis historias</h2>
+        <a class="btn gr btn-verde btn-simple btn-icon" href="./escribir.html">
+          <span class="material-symbols-outlined">add</span>
+          <span>Historia Nueva</span>
+        </a>
+      </div>
+      <div class="historias sb-gris">
+        <div class="arriba">
+            <h3 class="font-Lato subrayado subrayado--verde">Todas las historias</h3>
+        </div>
+        <div id="historias-container" class="abajo">
+            <div id="cargando" class="mensaje-info">
+              <i class="fas fa-circle-notch fa-spin fa-2x icono"></i> <br> Cargando tus historias...
+    
+            </div>
+            <div id="error" class="mensaje-info" style="display: none;">
+              <i class="fa-solid fa-circle-exclamation fa-2x icono"></i> <br> Ocurrió un error al cargar tus historias.
+
+            </div>
+            <div id="sin-historias" class="mensaje-info" style="display: none;">
+              No has creado ninguna historia todavía.
+              <a href="./escribir.html" class="btn btn-verde">Crear primera historia</a>
+            </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="./JS/navbar.js"></script>
+    <script type="module" src="./JS/mis-libros.js"></script>
+
+</body>
+</html>

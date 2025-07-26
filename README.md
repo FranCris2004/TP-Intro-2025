@@ -1,4 +1,4 @@
-# Segundo Trabajo Practivo Intro 2025 (Camejo)
+# Segundo Trabajo Practico Intro 2025 (Camejo)
 
 ## Integrantes:
 

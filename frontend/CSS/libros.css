@@ -16,29 +16,7 @@ header {
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 2rem;
-  padding: 0 1rem;
-}
-
-.libros-titulo {
-  color: var(--verde);
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin: 0;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-  position: relative;
-  display: inline-block;
-}
-
-.libros-titulo::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--verde), var(--verde-claro));
-  border-radius: 3px;
+  padding: 1rem 2rem;
 }
 
 .ordenar-container {
@@ -48,7 +26,6 @@ header {
 }
 
 .ordenar-label {
-  font-family: 'Poppins', sans-serif;
   font-size: 0.95rem;
   color: var(--negro);
   font-weight: 500;
@@ -90,12 +67,7 @@ header {
     width: 100%;
   }
 }
-.mensaje-info{
-  display: block;
-  text-align: center;
-  font-family: 'Poppins', sans-serif;
 
-}
 #container-libros {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -106,7 +78,7 @@ header {
 
 .card {
   position: relative;
-  border: 1px solid #bbbbbb80;
+  border: 1px solid var(--gris);
   border-radius: 6px;
   padding: 0.5rem;
   text-align: center;
@@ -114,16 +86,7 @@ header {
   display: flex;
   flex-direction: column;
   min-height: 380px; /* Altura mínima para evitar solapamientos */
-}
-
-.card-imagen {
-  width: 100%;
-  max-width: 160px;
-  aspect-ratio: 2 / 3;
-  border-radius: 5px;
-  object-fit: cover;
-  display: block;
-  margin: 0 auto 0.5rem;
+  z-index: 1;
 }
 
 .card-titulo {
@@ -145,7 +108,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--verde);
+  color: var(--negro-a);
 }
 .card-actions {
   margin-top: auto; /* Empuja los botones hacia abajo */
@@ -170,9 +133,9 @@ header {
 }
 
 .btn-libros:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   background-color: var(--verde);
-  box-shadow: 0 7px 14px var(--violeta);
+  box-shadow: 0 7px 14px var(--negro-a);
   color: var(--blanco);
 }
 
