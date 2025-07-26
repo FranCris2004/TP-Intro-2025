@@ -2,6 +2,28 @@ import conn from "../services/db_connection.js";
 import Usuario from "../models/usuario.js";
 
 //
+// Misc
+//
+
+async function validateIdUsuario(id) {
+  return (
+    (await conn.query("SELECT 1 FROM usuario WHERE id = $1 LIMIT 1", [id]))
+      .rowCount !== 0
+  );
+}
+
+async function validateContrasenia(id, contrasenia) {
+  try {
+    const usuario = await getUsuarioById(id);
+
+    return usuario.contrasenia === contrasenia;
+  } catch (error) {
+    console.log("Error en validateContrasenia:", error);
+    throw error;
+  }
+}
+
+//
 // Create
 //
 
@@ -88,13 +110,6 @@ async function getUsuarioById(id, contrasenia) {
 // Update
 //
 
-async function validateIdUsuario(id) {
-  return (
-    (await conn.query("SELECT 1 FROM usuario WHERE id = $1 LIMIT 1", [id]))
-      .rowCount !== 0
-  );
-}
-
 async function updateUsuarioById(
   id,
   nombre = null,
@@ -158,4 +173,5 @@ export default {
   createUsuario,
   updateUsuarioById,
   deleteUsuarioById,
+  validateContrasenia,
 };
