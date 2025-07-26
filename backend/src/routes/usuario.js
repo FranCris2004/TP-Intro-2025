@@ -88,7 +88,7 @@ router.put("/:id_usuario", async (req, res) => {
       fecha_de_nacimiento,
     } = req.body;
 
-    if (usuario_service.validateContrasenia(id, contrasenia)) {
+    if (await usuario_service.validateContrasenia(id, contrasenia)) {
       const usuario_actualizado = await usuario_service.updateUsuarioById(
         id,
         nombre || null,
@@ -98,9 +98,7 @@ router.put("/:id_usuario", async (req, res) => {
       );
       res.status(200).send(usuario_actualizado);
     } else {
-      res
-        .status(401)
-        .send("No cuenta con el permiso para actualizar este usuario");
+      res.status(401).send("Unauthorized");
     }
   } catch (error) {
     res.status(500).send("Error al actualizar el usuario");
@@ -116,7 +114,10 @@ router.delete("/:id_usuario", async (req, res) => {
     const id_usuario = req.params.id_usuario;
     console.log(`id_usuario: ${id_usuario}`);
 
-    if (usuario_service.deleteUsuarioById(id_usuario)) {
+    const contrasenia = req.body.contrasenia;
+
+    if (await usuario_service.validateContrasenia(id_usuario, contrasenia)) {
+      await usuario_service.deleteUsuarioById(id_usuario);
       res.status(200).send("OK");
     } else {
       res.status(401).send("Unauthorized");
