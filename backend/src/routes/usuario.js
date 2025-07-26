@@ -1,6 +1,7 @@
 import { Router } from "express";
 import usuario_service from "../services/usuario_service.js";
 import pagina_service from "../services/pagina_service.js";
+import Usuario from "../models/usuario.js";
 
 const router = Router();
 
@@ -73,8 +74,37 @@ router.get("/:id_usuario/finales", async (req, res) => {
 
 // PUT /v1/usuario/:id_usuario
 router.put("/:id_usuario", async (req, res) => {
-  console.log(`Actualizar usuario ${req.params.id_usuario}`);
-  res.status(501).send("Error al actualizar el usuario");
+  try {
+    console.log("Method: PUT\nURI: /v1/usuario/:id_usuario");
+
+    const id_usuario = req.params.id_usuario;
+    console.log(`id_usuario: ${id}`);
+
+    const {
+      contrasenia,
+      nueva_contrasenia,
+      nombre,
+      email,
+      fecha_de_nacimiento,
+    } = req.body;
+
+    if (usuario_service.validateContrasenia(id, contrasenia)) {
+      const usuario_actualizado = await usuario_service.updateUsuarioById(
+        id,
+        nombre || null,
+        nueva_contrasenia || null,
+        email || null,
+        fecha_de_nacimiento || null
+      );
+      res.status(200).send(usuario_actualizado);
+    } else {
+      res
+        .status(401)
+        .send("No cuenta con el permiso para actualizar este usuario");
+    }
+  } catch (error) {
+    res.status(500).send("Error al actualizar el usuario");
+  }
 });
 
 // DELETE /v1/usuario/:id_usuario
