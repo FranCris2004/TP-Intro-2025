@@ -1,47 +1,31 @@
 import conn from "../services/db_connection.js";
 import Usuario from "../models/usuario.js";
 
-async function getAllUsuarios() {
-  try {
-    const res = await conn.query("SELECT * FROM usuario");
+//
+// Misc
+//
 
-    return res.rows.map(
-      (row) =>
-        new Usuario(
-          row.id,
-          row.nombre,
-          row.email,
-          row.fecha_registro,
-          row.fecha_de_nacimiento
-        )
-    );
+async function validateIdUsuario(id) {
+  return (
+    (await conn.query("SELECT 1 FROM usuario WHERE id = $1 LIMIT 1", [id]))
+      .rowCount !== 0
+  );
+}
+
+async function validateContrasenia(id, contrasenia) {
+  try {
+    const usuario = await getUsuarioById(id);
+
+    return usuario.contrasenia === contrasenia;
   } catch (error) {
-    console.log(`Error en getAllUsuarios: ${error}`);
+    console.log("Error en validateContrasenia:", error);
     throw error;
   }
 }
 
-async function getUsuarioById(id, contrasenia) {
-  try {
-    const res = await conn.query("SELECT * FROM usuario WHERE id = $1", [id]);
-
-    if (res.rowCount === 0) throw new Error("Usuario no encontrado");
-
-    if (res.row[0].contrasenia !== contrasenia)
-      throw new Error("Contrasenia incorrecta");
-
-    return new Usuario(
-      res.rows[0].id,
-      res.rows[0].nombre,
-      res.rows[0].email,
-      res.rows[0].fecha_registro,
-      res.rows[0].fecha_de_nacimiento
-    );
-  } catch (error) {
-    console.error("Error en getUsuarioById:", error);
-    throw error;
-  }
-}
+//
+// Create
+//
 
 async function createUsuario(nombre, contrasenia, email, fecha_de_nacimiento) {
   try {
@@ -76,19 +60,59 @@ async function createUsuario(nombre, contrasenia, email, fecha_de_nacimiento) {
   }
 }
 
-async function validateIdUsuario(id) {
-  return (
-    (await conn.query("SELECT 1 FROM usuario WHERE id = $1 LIMIT 1", [id]))
-      .rowCount !== 0
-  );
+//
+// Read
+//
+
+async function getAllUsuarios() {
+  try {
+    const res = await conn.query("SELECT * FROM usuario");
+
+    return res.rows.map(
+      (row) =>
+        new Usuario(
+          row.id,
+          row.nombre,
+          row.email,
+          row.fecha_registro,
+          row.fecha_de_nacimiento
+        )
+    );
+  } catch (error) {
+    console.log(`Error en getAllUsuarios: ${error}`);
+    throw error;
+  }
 }
+
+async function getUsuarioById(id) {
+  try {
+    const res = await conn.query("SELECT * FROM usuario WHERE id = $1", [id]);
+
+    if (res.rowCount === 0) throw new Error("Usuario no encontrado");
+
+    return new Usuario(
+      res.rows[0].id,
+      res.rows[0].nombre,
+      res.rows[0].email,
+      res.rows[0].fecha_registro,
+      res.rows[0].fecha_de_nacimiento
+    );
+  } catch (error) {
+    console.error("Error en getUsuarioById:", error);
+    throw error;
+  }
+}
+
+//
+// Update
+//
 
 async function updateUsuarioById(
   id,
-  nombre = null,
-  contrasenia = null,
-  email = null,
-  fecha_de_nacimiento = null
+  nombre,
+  contrasenia,
+  email,
+  fecha_de_nacimiento
 ) {
   try {
     if (!id) throw new Error("ID de usuario requerido");
@@ -97,27 +121,39 @@ async function updateUsuarioById(
       throw new Error("Usuario no encontrado");
 
     if (nombre)
-      conn.query("UPDATE usuario SET nombre = $2 WHERE id = $1", [id, nombre]);
+      await conn.query("UPDATE usuario SET nombre = $2 WHERE id = $1", [
+        id,
+        nombre,
+      ]);
 
     if (contrasenia)
-      conn.query("UPDATE usuario SET contrasenia= $2 WHERE id = $1", [
+      await conn.query("UPDATE usuario SET contrasenia= $2 WHERE id = $1", [
         id,
         contrasenia,
       ]);
 
     if (email)
-      conn.query("UPDATE usuario SET email = $2 WHERE id = $1", [id, email]);
+      await conn.query("UPDATE usuario SET email = $2 WHERE id = $1", [
+        id,
+        email,
+      ]);
 
     if (fecha_de_nacimiento)
-      conn.query("UPDATE usuario SET fecha_nacimiento = $2 WHERE id = $1", [
-        id,
-        fecha_nacimiento,
-      ]);
+      await conn.query(
+        "UPDATE usuario SET fecha_nacimiento = $2 WHERE id = $1",
+        [id, fecha_nacimiento]
+      );
+
+    return await getUsuarioById(id);
   } catch (error) {
     console.error("Error en updateUsuarioById:", error);
     throw error;
   }
 }
+
+//
+// Delete
+//
 
 async function deleteUsuarioById(id) {
   try {
@@ -136,4 +172,5 @@ export default {
   createUsuario,
   updateUsuarioById,
   deleteUsuarioById,
+  validateContrasenia,
 };

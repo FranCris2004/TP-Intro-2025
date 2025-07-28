@@ -1,5 +1,7 @@
 import { Router } from "express";
 import usuario_service from "../services/usuario_service.js";
+import pagina_service from "../services/pagina_service.js";
+import Usuario from "../models/usuario.js";
 
 const router = Router();
 
@@ -40,11 +42,9 @@ router.get("/:id_usuario", async (req, res) => {
     console.log("Method: GET\nURI: /v1/usuario/:id_usuario");
 
     const { id } = res.params;
-
     console.log(`id_usuario: ${id}`);
 
     const usuario = await usuario_service.getUsuarioById(id);
-
     console.log(`Response: ${usuario}`);
 
     res.status(200).send(usuario);
@@ -55,13 +55,54 @@ router.get("/:id_usuario", async (req, res) => {
 
 // GET /v1/usuario/:id_usuario/finales
 router.get("/:id_usuario/finales", async (req, res) => {
-  res.status(501).send("Error al obtener los finales que completo el usuario");
+  try {
+    console.log("Method: GET\nURI: /v1/usuario/:id_usuario/finales");
+
+    const id_usuario = req.params.id_usuario;
+    console.log(`id_usuario: ${id}`);
+
+    const finales = await pagina_service.getAllPaginasFinalesByUsuarioId(
+      id_usuario
+    );
+    console.log(`Response: ${finales}`);
+
+    res.status(200).send(finales);
+  } catch (error) {
+    res.status(500).send("Error al obtener los finales del usuario");
+  }
 });
 
 // PUT /v1/usuario/:id_usuario
 router.put("/:id_usuario", async (req, res) => {
-  console.log(`Actualizar usuario ${req.params.id_usuario}`);
-  res.status(501).send("Error al actualizar el usuario");
+  try {
+    console.log("Method: PUT\nURI: /v1/usuario/:id_usuario");
+
+    const id_usuario = req.params.id_usuario;
+    console.log(`id_usuario: ${id}`);
+
+    const {
+      contrasenia,
+      nueva_contrasenia,
+      nombre,
+      email,
+      fecha_de_nacimiento,
+    } = req.body;
+
+    if (await usuario_service.validateContrasenia(id, contrasenia)) {
+      const usuario_actualizado = await usuario_service.updateUsuarioById(
+        id,
+        nombre || null,
+        nueva_contrasenia || null,
+        email || null,
+        fecha_de_nacimiento || null
+      );
+      res.status(200).send(usuario_actualizado);
+    } else {
+      res.status(401).send("Unauthorized");
+    }
+  } catch (error) {
+    res.status(500).send("Error al actualizar el usuario");
+  }
 });
 
 // DELETE /v1/usuario/:id_usuario
@@ -73,7 +114,10 @@ router.delete("/:id_usuario", async (req, res) => {
     const id_usuario = req.params.id_usuario;
     console.log(`id_usuario: ${id_usuario}`);
 
-    if (usuario_service.deleteUsuarioById(id_usuario)) {
+    const contrasenia = req.body.contrasenia;
+
+    if (await usuario_service.validateContrasenia(id_usuario, contrasenia)) {
+      await usuario_service.deleteUsuarioById(id_usuario);
       res.status(200).send("OK");
     } else {
       res.status(401).send("Unauthorized");
