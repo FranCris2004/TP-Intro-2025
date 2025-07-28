@@ -1,7 +1,6 @@
 import { Router } from "express";
 import usuario_service from "../services/usuario_service.js";
 import pagina_service from "../services/pagina_service.js";
-import Usuario from "../models/usuario.js";
 
 const router = Router();
 
@@ -11,7 +10,6 @@ router.post("/", async (req, res) => {
     console.log("Method: POST\nURI: /v1/usuario");
 
     const { nombre, contrasenia, email, fecha_de_nacimiento } = req.body;
-
     console.log(
       `
       nombre: ${nombre},
@@ -27,7 +25,6 @@ router.post("/", async (req, res) => {
       email,
       fecha_de_nacimiento
     );
-
     console.log(`Response: ${nuevo_usuario}`);
 
     res.status(200).send(nuevo_usuario);
@@ -41,10 +38,10 @@ router.get("/:id_usuario", async (req, res) => {
   try {
     console.log("Method: GET\nURI: /v1/usuario/:id_usuario");
 
-    const { id } = res.params;
-    console.log(`id_usuario: ${id}`);
+    const id_usuario = req.params.id_usuario;
+    console.log(`id_usuario: ${id_usuario}`);
 
-    const usuario = await usuario_service.getUsuarioById(id);
+    const usuario = await usuario_service.getUsuarioById(id_usuario);
     console.log(`Response: ${usuario}`);
 
     res.status(200).send(usuario);
@@ -77,29 +74,37 @@ router.put("/:id_usuario", async (req, res) => {
   try {
     console.log("Method: PUT\nURI: /v1/usuario/:id_usuario");
 
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
     const id_usuario = req.params.id_usuario;
-    console.log(`id_usuario: ${id}`);
+    console.log(`id_usuario: ${id_usuario}`);
 
     const {
-      contrasenia,
       nueva_contrasenia,
       nombre,
       email,
       fecha_de_nacimiento,
     } = req.body;
 
-    if (await usuario_service.validateContrasenia(id, contrasenia)) {
-      const usuario_actualizado = await usuario_service.updateUsuarioById(
-        id,
-        nombre || null,
-        nueva_contrasenia || null,
-        email || null,
-        fecha_de_nacimiento || null
-      );
-      res.status(200).send(usuario_actualizado);
-    } else {
-      res.status(401).send("Unauthorized");
-    }
+    const usuario_actualizado = await usuario_service.updateUsuarioById(
+      id_usuario,
+      nombre || null,
+      nueva_contrasenia || null,
+      email || null,
+      fecha_de_nacimiento || null
+    );
+    console.log(`Response: ${usuario_actualizado}`);
+
+    res.status(200).send(usuario_actualizado);
   } catch (error) {
     res.status(500).send("Error al actualizar el usuario");
   }
@@ -111,17 +116,23 @@ router.delete("/:id_usuario", async (req, res) => {
     console.log(`Eliminar usuario ${req.params.id_usuario}`);
     res.status(501).send("Error al eliminar el usuario");
 
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
     const id_usuario = req.params.id_usuario;
     console.log(`id_usuario: ${id_usuario}`);
 
-    const contrasenia = req.body.contrasenia;
+    await usuario_service.deleteUsuarioById(id_usuario);
 
-    if (await usuario_service.validateContrasenia(id_usuario, contrasenia)) {
-      await usuario_service.deleteUsuarioById(id_usuario);
-      res.status(200).send("OK");
-    } else {
-      res.status(401).send("Unauthorized");
-    }
+    res.status(200).send("OK");
   } catch (error) {
     res.status(500).send("Error al eliminar el usuario");
   }
