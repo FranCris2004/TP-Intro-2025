@@ -188,6 +188,7 @@ async function deleteUsuarioById(id) {
 export default {
   getAllUsuarios,
   getUsuarioById,
+  getUsuarioByNombre,
   createUsuario,
   updateUsuarioById,
   deleteUsuarioById,
