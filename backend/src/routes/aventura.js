@@ -10,17 +10,29 @@ router.post("/", async (req, res) => {
   try {
     console.log("Method: POST\nURI: /v1/aventura");
 
-    const { titulo, descripcion, autor_id, genero } = req.body;
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    const { titulo, descripcion, autor_id, genero, portada } = req.body;
     console.log(
       `
       titulo: ${titulo},
       descripcion: ${descripcion},
       autor_id: ${autor_id},
-      genero: ${genero}
+      genero: ${genero},
+      portada: ${portada}
       `
     );
 
-    const nueva_aventura = aventura_service.createAventura(
+    const nueva_aventura = await aventura_service.createAventura(
       titulo,
       descripcion,
       autor_id,
@@ -39,24 +51,34 @@ router.post("/:id_aventura/pagina", async (req, res) => {
   try {
     console.log("Method: POST\nURI: /v1/aventura/:id_aventura/pagina");
 
-    const { id_aventura, titulo, contenido, imagen, imagen_de_fondo } =
-      req.body;
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    const { id_aventura, numero, titulo, contenido, imagen } = req.body;
     console.log(
       `
         id_aventura: ${id_aventura},
+        numero: ${numero},
         titulo: ${titulo},
         contenido: ${contenido},
-        imagen: ${imagen},
-        imagen_de_fondo: ${imagen_de_fondo}
+        imagen: ${imagen}
         `
     );
 
     const nueva_pagina = pagina_service.createPagina(
-      titulo,
       id_aventura,
+      numero,
+      titulo,
       contenido,
-      imagen,
-      imagen_de_fondo
+      imagen
     );
     console.log(`Response: ${nueva_pagina}`);
 
@@ -72,6 +94,17 @@ router.post("/:id_aventura/:numero_pagina/opcion", async (req, res) => {
     console.log(
       "Method: POST\nURI: /v1/aventura/:id_aventura/:numero_pagina/opcion"
     );
+
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
 
     const id_aventura = req.params.id_aventura;
     console.log(`id_aventura: ${id_aventura}`);
@@ -167,19 +200,137 @@ router.get("/:id_aventura/:numero_pagina/opciones", async (req, res) => {
 
 // PUT /v1/aventura/:id_aventura
 router.put("/:id_aventura", async (req, res) => {
-  res.send(`Actualizar aventura ${req.params.id_aventura}`);
+  try {
+    console.log(`Method: PUT\nURI: /v1/aventura/:id_aventura`);
+
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    const id_aventura = req.params.id_aventura;
+    console.log(`id_aventura: ${id_aventura}`);
+
+    const { titulo, descripcion, autor_id, genero, portada } = req.body;
+    console.log(
+      `
+      titulo: ${titulo},
+      descripcion: ${descripcion},
+      autor_id: ${autor_id},
+      genero: ${genero}
+      `
+    );
+
+    const aventura_actualizada = await aventura_service.updateAventuraById(
+      id_aventura,
+      titulo,
+      descripcion,
+      autor_id,
+      genero,
+      portada
+    );
+    console.log(`Response: ${aventura_actualizada}`);
+
+    res.status(200).send(aventura_actualizada);
+  } catch (error) {
+    res.status(500).send("Fallo al actualizar la aventura");
+  }
 });
 
-// PUT /v1/aventura/:id_aventura/pagina
-router.put("/:id_aventura/pagina", async (req, res) => {
-  res.send(`Actualizar página en aventura ${req.params.id_aventura}`);
+// PUT /v1/aventura/:id_aventura/:numero_pagina
+router.put("/:id_aventura/:numero_pagina", async (req, res) => {
+  try {
+    console.log("Method: POST\nURI: /v1/aventura/:id_aventura/pagina");
+
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    const numero_pagina = req.params.numero_pagina;
+    console.log(`numero_pagina: ${numero_pagina}`);
+
+    const { id_aventura, titulo, contenido, imagen } = req.body;
+    console.log(
+      `
+        id_aventura: ${id_aventura},
+        titulo: ${titulo},
+        contenido: ${contenido},
+        imagen: ${imagen}
+        `
+    );
+
+    const pagina_actualizada = pagina_service.updatePaginaByNumero(
+      id_aventura,
+      numero_pagina,
+      titulo,
+      contenido,
+      imagen
+    );
+    console.log(`Response: ${pagina_actualizada}`);
+
+    res.send(pagina_actualizada);
+  } catch (error) {
+    res.status(500).send("Error al crear la pagina");
+  }
 });
 
-// PUT /v1/aventura/:id_aventura/:numero_pagina/opcion
-router.put("/:id_aventura/:numero_pagina/opcion", async (req, res) => {
-  res.send(
-    `Actualizar opción en página ${req.params.numero_pagina} de aventura ${req.params.id_aventura}`
-  );
+// PUT /v1/aventura/:id_aventura/:numero_pagina/:id_opcion
+router.put("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
+  try {
+    console.log(
+      "Method: POST\nURI: /v1/aventura/:id_aventura/:numero_pagina/opcion"
+    );
+
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    const id_aventura = req.params.id_aventura;
+    console.log(`id_aventura: ${id_aventura}`);
+
+    const numero_pagina = req.params.numero_pagina;
+    console.log(`numero_pagina: ${numero_pagina}`);
+
+    const { descripcion, numero_pagina_destino } = req.body;
+    console.log(
+      `
+      descripcion: ${descripcion},
+      numero_pagina_destino: ${numero_pagina_destino}
+      `
+    );
+
+    const opcion_actualizada = opcion_service.updateOpcionByNumero(
+      id_aventura,
+      numero_pagina,
+      descripcion,
+      numero_pagina_destino
+    );
+    console.log(`Response: ${opcion_actualizada}`);
+
+    res.send(opcion_actualizada);
+  } catch (error) {
+    res.status(500).send("Error al crear la opcion");
+  }
 });
 
 // DELETE /v1/aventura/:id_aventura
@@ -187,14 +338,22 @@ router.delete("/:id_aventura", async (req, res) => {
   try {
     console.log(`Method: DELETE\nURI: /v1/aventura/:id_aventura`);
 
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
     const id_aventura = req.params.id_aventura;
     console.log(`id_aventura: ${id_aventura}`);
 
-    if (aventura_service.deleteAventuraById(id_aventura)) {
-      res.status(200).send("OK");
-    } else {
-      res.status(401).send("Unauthorized");
-    }
+    await aventura_service.deleteAventuraById(id_aventura);
+    res.status(200).send("OK");
   } catch (error) {
     res.status(500).send("Error al eliminar la aventura");
   }
@@ -207,17 +366,25 @@ router.delete("/:id_aventura/:numero_pagina", async (req, res) => {
       `Method: DELETE\nURI: /v1/aventura/:id_aventura/:numero_pagina`
     );
 
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
+
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
     const id_aventura = req.params.id_aventura;
     console.log(`id_aventura: ${id_aventura}`);
 
     const numero_pagina = req.params.numero_pagina;
     console.log(`numero_pagina: ${numero_pagina}`);
 
-    if (pagina_service.deletePaginaByNumero(id_aventura, numero_pagina)) {
-      res.status(200).send("OK");
-    } else {
-      res.status(401).send("Unauthorized");
-    }
+    await pagina_service.deletePaginaByNumero(id_aventura, numero_pagina);
+    res.status(200).send("OK");
   } catch (error) {
     res.status(500).send("Error al eliminar la pagina");
   }
@@ -230,25 +397,33 @@ router.delete("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
       `Method: DELETE\nURI: /v1/aventura/:id_aventura/:numero_pagina/:id_opcion`
     );
 
-    const id_aventura = req.params.id_aventura;
-    console.log(`id_aventura: ${id_aventura}`);
+    const autorizado = await usuario_service.validateContrasenia(
+      req.body.auth.id,
+      req.body.auth.contrasenia
+    );
+    console.log(`Autorizado: ${autorizado}`);
 
-    const numero_pagina = req.params.numero_pagina;
-    console.log(`numero_pagina: ${numero_pagina}`);
-
-    const id_opcion = req.params.id_opcion;
-    console.log(`id_opcion: ${id_opcion}`);
+    if (!autorizado) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
 
     // id_aventura y numero_pagina no se usan realmente
     // estan en la URI por un error de diseño
     // se pueden rellenar con cualquier numero
     // e igual funcionaria para la misma opcion
 
-    if (opcion_service.deleteOpcionById(id_opcion)) {
-      res.status(200).send("OK");
-    } else {
-      res.status(401).send("Unauthorized");
-    }
+    // const id_aventura = req.params.id_aventura;
+    // console.log(`id_aventura: ${id_aventura}`);
+
+    // const numero_pagina = req.params.numero_pagina;
+    // console.log(`numero_pagina: ${numero_pagina}`);
+
+    const id_opcion = req.params.id_opcion;
+    console.log(`id_opcion: ${id_opcion}`);
+
+    await opcion_service.deleteOpcionById(id_opcion);
+    res.status(200).send("OK");
   } catch (error) {
     res.status(500).send("Error al eliminar la opcion");
   }
