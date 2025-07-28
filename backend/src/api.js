@@ -1,4 +1,5 @@
 import express, { json } from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import usuarioRouter from "./routes/usuario.js";
 import usuariosRouter from "./routes/usuarios.js";
@@ -12,6 +13,12 @@ const port = process.env.PORT || 3000;
 
 app.use([
   json(),
+  cors({
+    origin: "*",
+    methods: ["POST", "GET", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
+    credentials: false,
+  }),
   (req, res, next) => {
     res.set(
       "Cache-Control",
