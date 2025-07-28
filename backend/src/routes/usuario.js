@@ -4,6 +4,32 @@ import pagina_service from "../services/pagina_service.js";
 
 const router = Router();
 
+// POST /v1/usuario//login
+router.post("/login", async (req, res) => {
+  try {
+    console.log("Method: POST\nURI: /v1/usuario/login");
+
+    const { nombre, contrasenia } = req.body;
+    console.log(
+      `
+      nombre: ${nombre},
+      `
+    );
+
+    const usuario = usuario_service.getUsuarioByNombre(nombre);
+    console.log(`usuario: ${usuario}`);
+
+    if (usuario.contrasenia !== contrasenia) {
+      res.status(401).send("Nombre o contrasenia incorrectos");
+      return;
+    }
+
+    res.status(200).send(usuario);
+  } catch (error) {
+    res.status(500).send("Error al logear");
+  }
+});
+
 // POST /v1/usuario
 router.post("/", async (req, res) => {
   try {
@@ -88,12 +114,7 @@ router.put("/:id_usuario", async (req, res) => {
     const id_usuario = req.params.id_usuario;
     console.log(`id_usuario: ${id_usuario}`);
 
-    const {
-      nueva_contrasenia,
-      nombre,
-      email,
-      fecha_de_nacimiento,
-    } = req.body;
+    const { nueva_contrasenia, nombre, email, fecha_de_nacimiento } = req.body;
 
     const usuario_actualizado = await usuario_service.updateUsuarioById(
       id_usuario,
