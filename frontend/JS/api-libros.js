@@ -41,24 +41,26 @@ async function obtenerUsuarios() {
   }
 }
 
-async function crearUsuario(usuarioData) {
-  try {
-    const res = await fetch(`${API_BASE}/usuario`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(usuarioData),
-    });
+async function crearUsuario(usuario) {
+  const response = await fetch(`${API_BASE}/usuario`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(usuario)
+  });
 
-    if (!res.ok) throw new Error("Error al crear usuario");
+  const respuestaTexto = await response.text();
+  console.log("Estado:", response.status);
+  console.log("Respuesta:", respuestaTexto);
 
-    const nuevoUsuario = await res.json();
-    console.log("Usuario creado:", nuevoUsuario);
-    return nuevoUsuario;
-  } catch (error) {
-    console.error("Error al intentar crear un usuario:", error.message);
-    throw error;
+  if (!response.ok) {
+    throw new Error("No se pudo crear el usuario: " + respuestaTexto);
   }
+
+  return JSON.parse(respuestaTexto);
 }
+
 
 async function actualizarUsuario(id, usuarioData) {
   try {

@@ -9,6 +9,11 @@ router.post("/", async (req, res) => {
     console.log("Method: POST\nURI: /v1/usuario");
 
     const { nombre, contrasenia, email, fecha_de_nacimiento } = req.body;
+    
+    if (!nombre || !contrasenia || !email || !fecha_de_nacimiento) {
+      console.warn("Faltan campos obligatorios");
+      return res.status(400).json({ mensaje: "Faltan campos obligatorios" });
+    }
 
     console.log(
       `
@@ -30,7 +35,11 @@ router.post("/", async (req, res) => {
 
     res.status(200).send(nuevo_usuario);
   } catch (error) {
-    res.status(500).send("Error al crear el usuario");
+    console.error("Error al crear el usuario:", error);
+    res.status(500).json({
+      mensaje: "Error al crear el usuario",
+      detalle: error.message,
+    });
   }
 });
 

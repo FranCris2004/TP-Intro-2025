@@ -4,21 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login / Registro</title>
+  <link rel="icon" href="./imagenes/favicon.svg" type="image/x-icon">
   <link rel="stylesheet" href="CSS/base.css" />
   <link rel="stylesheet" href="./CSS/validacion.css" />
   <style>
       .form-container { 
-          display: none;  /* Oculta todos los formularios por defecto */ 
+          display: none; 
       }
       .form-container.active { 
-          display: block; /* Muestra solo el formulario con clase "active" */ 
+          display: block; 
       }
   </style>
 </head>
 <body>
   <div class="container">
       <div id="form-login" class="form-container validacion-container active">
-      <form action="#">
+      <form>
           <h1>Iniciar Sesión</h1>
           <input id="usuario-login" type="text" placeholder="Usuario" />
           <input id="contraseña-login" type="password" placeholder="Contraseña" />
@@ -30,7 +31,7 @@
       </div>
 
       <div id="form-registro" class="form-container validacion-container">
-      <form action="#">
+      <form>
           <h1>Crea tu cuenta</h1>
           <input id="usuario-registro" type="text" placeholder="Nombre de usuario" />
           <input id="email-registro" type="email" placeholder="Correo electrónico (Gmail)" pattern=".+@gmail\.com" title="Debe ser un correo @gmail.com" />
@@ -47,39 +48,7 @@
           <div class="overlay"></div>
       </div>
   </div>
+    <script type="module" src="JS/registro.js"></script>
 
-  <script type="module" src="./JS/api-aute.js"></script>
-  <script>
-  function mostrarFormulario(tipo) {
-      const login = document.getElementById('form-login');
-      const registro = document.getElementById('form-registro');
-
-      if (tipo === 'login') {
-      login.classList.add('active'); /*Añade una clase CSS (active) al elemento (login).*/
-      registro.classList.remove('active'); /*Elimina una clase CSS (active) del elemento (registro).*/
-      } else if (tipo === 'registro') {
-      login.classList.remove('active');
-      registro.classList.add('active');
-      } else {
-      // Por defecto mostrar login
-      login.classList.add('active');
-      registro.classList.remove('active');
-      }
-  }
-  const urlParams = new URLSearchParams(window.location.search);
-  /* window.location.search -> Obtiene la parte de la URL después del ? (query string).
-  new URLSearchParams -> Crea un objeto especial que convierte el query string en una estructura manipulable.
-  urlParams ahora es un objeto que representa:
-  { "form" => "registro"}
-  */
-  const form = urlParams.get('form'); 
-  /*
-  urlParams.get('clave'):
-  Busca el valor del parámetro 'form' en la URL.
-  Si existe: Retorna su valor (ej: "registro").
-  Si no existe: Retorna null
-  */
-  mostrarFormulario(form);
-  </script>
 </body>
 </html>
