@@ -105,7 +105,7 @@ async function getUsuarioById(id) {
 
 async function getUsuarioByNombre(nombre) {
   try {
-    const res = conn.query("SELECT * FROM usuario WHERE nombre = $1", [nombre]);
+    const res = await conn.query("SELECT * FROM usuario WHERE nombre = $1", [nombre]);
 
     if ((await res).rowCount === 0) throw new Error("Usuario no encontrado");
 
