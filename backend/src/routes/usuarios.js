@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
     res.send(usuarios);
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error al obtener todos los usuarios");
+    res.status(500).json("Error al obtener todos los usuarios");
   }
 });
 
