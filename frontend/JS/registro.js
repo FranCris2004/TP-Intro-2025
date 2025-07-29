@@ -178,7 +178,6 @@ document.querySelector("#form-registro form").addEventListener("submit", async (
   }
 });
 
-// ========== NUEVO: LÓGICA PARA LOGIN ==========
 document.querySelector("#form-login form").addEventListener("submit", async (e) => {
   e.preventDefault();
 

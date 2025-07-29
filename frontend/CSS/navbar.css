@@ -148,6 +148,9 @@ html {
 .pagina-clara .navbar {
   position: static;
 }
+.pagina-clara .desplegable-content{
+  background-color: #f8f8f8d8;
+}
 @media (max-width: 768px) {
   .navbar {
     flex-wrap: wrap;

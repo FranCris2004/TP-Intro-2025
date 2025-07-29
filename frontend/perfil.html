@@ -8,58 +8,50 @@
     <link rel="stylesheet" href="./CSS/perfil.css" />
 </head>
 <body class="pagina-clara">
-    <div id="navbar-container"></div>
-        <div class="perfil-container">
-        <h1>Mi Perfil</h1>
-
-        <!-- DATOS VISIBLES -->
-        <div id="datos-perfil">
-            <div class="dato">
-            <span class="etiqueta">Nombre:</span>
-            <span class="valor" id="nombre-valor">Catherine</span>
-            </div>
-
-            <div class="dato">
-            <span class="etiqueta">Email:</span>
-            <span class="valor" id="email-valor">cathy@email.com</span>
-            </div>
-
-            <div class="dato">
-            <span class="etiqueta">Contraseña:</span>
-            <span class="valor">********</span>
-            </div>
-
-            <div class="dato">
-            <span class="etiqueta">Fecha de nacimiento:</span>
-            <span class="valor" id="fecha-valor">2000-01-01</span>
-            </div>
-
-            <a id="btn-editar" class="btn-editar btn gr btn-verde btn-icon">
-            <span class="material-symbols-outlined">person_edit</span>
-            <span> Editar información </span>
-            </a>
-            <div class="btn-abajo">
-              <a id="btn-cambiar-cont" class="btn-abajo btn btn-verde-blanco cb-verde btn-icon">
-                <span class="material-symbols-outlined">passkey</span>
-                <span> Cambiar Contraseña </span>
-              </a>
-              <a id="btn-borrar" class="btn-abajo btn-transparente cb-verde btn-borrar btn-icon">
-                <span class="material-symbols-outlined">person_remove</span>
-                <span> Borrar cuenta </span>
-              </a>
-            </div>
+  <div id="navbar-container"></div>
+    <div class="perfil-container">
+      <h1>Mi Perfil</h1>
+      <div id="datos-perfil">
+        <div class="dato">
+          <span class="etiqueta">Nombre:</span>
+          <span class="valor" id="nombre-valor"></span>
         </div>
-
-  <!-- FORMULARIO OCULTO -->
+        <div class="dato">
+          <span class="etiqueta">Email:</span>
+          <span class="valor" id="email-valor"></span>
+        </div>
+        <div class="dato">
+          <span class="etiqueta">Contraseña:</span>
+          <span class="valor">********</span>
+        </div>
+        <div class="dato">
+          <span class="etiqueta">Fecha de nacimiento:</span>
+          <span class="valor" id="fecha-valor"></span>
+        </div>
+        <a id="btn-editar" class="btn-editar btn gr btn-verde btn-icon">
+          <span class="material-symbols-outlined">person_edit</span>
+          <span> Editar información </span>
+        </a>
+        <div class="btn-abajo">
+          <a id="btn-cambiar-cont" class="btn-abajo btn btn-verde-blanco cb-verde btn-icon">
+            <span class="material-symbols-outlined">passkey</span>
+            <span> Cambiar Contraseña </span>
+          </a>
+          <a id="btn-borrar" class="btn-abajo btn-transparente cb-verde btn-borrar btn-icon">
+            <span class="material-symbols-outlined">person_remove</span>
+            <span> Borrar cuenta </span>
+          </a>
+        </div>
+    </div>
   <form id="form-edicion" style="display: none;">
     <div class="form-group">
       <label for="nombre">Nombre:</label>
-      <input type="text" id="nombre" value="Catherine" />
+      <input type="text" id="nombre" value="" />
     </div>
 
     <div class="form-group">
       <label for="email">Email:</label>
-      <input type="email" id="email" value="cathy@email.com" />
+      <input type="email" id="email" value="" />
     </div>
 
     <div class="form-group">
@@ -69,39 +61,27 @@
 
     <button type="submit" class="btn btn-verde">Aceptar cambios</button>
   </form>
-</div>
+  <form id="form-cambiar-cont" style="display: none;">
+    <div class="form-group">
+      <label for="cont-actual">Contraseña actual:</label>
+      <input type="password" id="cont-actual" required />
+    </div>
 
+    <div class="form-group">
+      <label for="cont-nueva">Nueva contraseña:</label>
+      <input type="password" id="cont-nueva" required />
+    </div>
 
+    <div class="form-group">
+      <label for="cont-confirmar">Confirmar nueva contraseña:</label>
+      <input type="password" id="cont-confirmar" required />
+    </div>
+
+    <button type="submit" class="btn btn-verde">Cambiar contraseña</button>
+    </form>
+  </div>
   <img src="./imagenes/Reading glasses-bro.svg" alt="Decoración" class="decoracion-fondo">
-    <script src="JS/navbar.js"></script>
-    <script>
-  const btnEditar = document.getElementById("btn-editar");
-  const datosPerfil = document.getElementById("datos-perfil");
-  const formEdicion = document.getElementById("form-edicion");
-
-  btnEditar.addEventListener("click", () => {
-    datosPerfil.style.display = "none";
-    formEdicion.style.display = "block";
-  });
-
-  formEdicion.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    // Tomamos los nuevos valores
-    const nuevoNombre = document.getElementById("nombre").value;
-    const nuevoEmail = document.getElementById("email").value;
-    const nuevaFecha = document.getElementById("fecha").value;
-
-    // Actualizamos los elementos visibles
-    document.getElementById("nombre-valor").textContent = nuevoNombre;
-    document.getElementById("email-valor").textContent = nuevoEmail;
-    document.getElementById("fecha-valor").textContent = nuevaFecha;
-
-    // Volvemos a mostrar los datos, ocultamos el formulario
-    formEdicion.style.display = "none";
-    datosPerfil.style.display = "block";
-  });
-</script>
-
+  <script src="JS/navbar.js"></script>
+  <script type="module" src="JS/perfil.js"></script>
 </body>
 </html>

@@ -18,19 +18,21 @@
       <a href="index.html">
         <img class="logo" src="./imagenes/favicon.svg" alt="Logo">
       </a>
-      <a class="logo-texto font-Montserrat" href="index.html" >RAMTORIA</a>
+      <a class="logo-texto font-Montserrat" href="index.html">RAMTORIA</a>
     </div>
 
     <div class="navbar-centro">
       <a href="./index.html">Inicio</a>
       <a href="./libros.html">Biblioteca</a>
-      <div class="desplegable" id="menuEscribir">
+      <div class="desplegable" id="menuEscribir" style="display:none;">
         <a class="desple-btn">Escribir <span class="material-symbols-outlined">stat_minus_1</span></a>
         <div class="desplegable-content">
           <a href="escribir.html" class="nueva-historia-link">
-            <span class="material-symbols-outlined">border_color</span> Nueva Historia</a>
+            <span class="material-symbols-outlined">border_color</span> Nueva Historia
+          </a>
           <a href="mis-historias.html" class="seguir-escribiendo">
-            <span class="material-symbols-outlined">newsstand</span> Seguir escribiendo</a>
+            <span class="material-symbols-outlined">newsstand</span> Seguir escribiendo
+          </a>
         </div>
       </div>
     </div>
@@ -40,68 +42,80 @@
         <a href="validacion.html?form=login" class="btn gr btn-transparente verde-invertido-sb sb-verde btn-sb-navbar">Iniciar Sesión</a>
         <a href="validacion.html?form=registro" class="btn gr btn-verde sb-verde btn-sb-navbar">Registrarse</a>
       </div>
-      <div id="userSection" style="display: none;">
+
+      <div id="userSection" style="display:none;">
         <div class="user-dropdown">
-          <button class="user-btn">
+          <button class="user-btn" id="userBtn">
             <span id="usernameDisplay"></span>
             <span class="material-symbols-outlined">arrow_drop_down</span>
           </button>
-          <div class="user-dropdown-content">
-            <a href="perfil.html" id="logoutBtn">
-              <span class="material-symbols-outlined">account_circle</span>Perfil</a>
+          <div class="user-dropdown-content" id="userDropdownContent" style="display:none;">
+            <a href="perfil.html" id="perfilBtn">
+              <span class="material-symbols-outlined">account_circle</span> Perfil
+            </a>
             <hr>
             <a href="#" id="logoutBtn">
-              <span class="material-symbols-outlined">logout</span> Cerrar sesión</a>
+              <span class="material-symbols-outlined">logout</span> Cerrar sesión
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </header>
 
   <script>
-  function mostrarUsuario() {
-    const user = JSON.parse(localStorage.getItem('usuario'));
-    console.log("Usuario cargado:", user);
-    const btnValidacion = document.getElementById('btnValidacion');
-    const userSection = document.getElementById('userSection');
-    const menuEscribir = document.getElementById('menuEscribir');
+    // Mostrar/Ocultar dropdown simple para el usuario
+    const userBtn = document.getElementById('userBtn');
+    const userDropdownContent = document.getElementById('userDropdownContent');
 
-    if (user) {
-      btnValidacion.style.display = 'none';
-      userSection.style.display = 'flex';
-      menuEscribir.style.display = 'block';
-      document.getElementById('usernameDisplay').textContent = user.nombre;
-
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-          localStorage.removeItem('usuario');
-          mostrarUsuario(); // refresca la UI
-          window.location.href = 'index.html';
-        });
-      }
-
-      const deleteAccountBtn = document.getElementById('deleteAccountBtn');
-      if (deleteAccountBtn) {
-        deleteAccountBtn.addEventListener('click', () => {
-          const confirmacion = confirm("¡Cuidado!\nSi borrás tu cuenta, también se eliminarán todas tus historias.\n¿Estás segura/o?");
-          if (confirmacion) {
-            localStorage.removeItem('usuario');
-            alert("Tu cuenta fue eliminada.");
-            window.location.href = 'index.html';
-          }
-        });
-      }
-
-    } else {
-      btnValidacion.style.display = 'flex';
-      userSection.style.display = 'none';
-      menuEscribir.style.display = 'none';
+    if (userBtn) {
+      userBtn.addEventListener('click', () => {
+        const isVisible = userDropdownContent.style.display === 'block';
+        userDropdownContent.style.display = isVisible ? 'none' : 'block';
+      });
     }
-  }
 
-  document.addEventListener('DOMContentLoaded', mostrarUsuario);
+    function mostrarUsuario() {
+      const user = JSON.parse(localStorage.getItem('usuario'));
+      console.log("Usuario cargado (esto se carga desde navbar.html):", user);
 
+      const btnValidacion = document.getElementById('btnValidacion');
+      const userSection = document.getElementById('userSection');
+      const menuEscribir = document.getElementById('menuEscribir');
+      const usernameDisplay = document.getElementById('usernameDisplay');
 
+      if (user) {
+        btnValidacion.style.display = 'none';
+        userSection.style.display = 'flex';
+        menuEscribir.style.display = 'block';
+        usernameDisplay.textContent = user.nombre || "Usuario";
+
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log("apretaste el boton cerrar sesion");
+            localStorage.removeItem('usuario');
+            window.location.href = 'index.html';
+          });
+        }
+
+      } else {
+        btnValidacion.style.display = 'flex';
+        userSection.style.display = 'none';
+        menuEscribir.style.display = 'none';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', mostrarUsuario);
+
+    // Cerrar el dropdown si clickeás afuera
+    document.addEventListener('click', (e) => {
+      const isClickInside = userBtn.contains(e.target) || userDropdownContent.contains(e.target);
+      if (!isClickInside) {
+        userDropdownContent.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
