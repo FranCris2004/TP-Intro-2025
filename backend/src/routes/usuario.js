@@ -16,13 +16,13 @@ router.post("/login", async (req, res) => {
     console.log(`usuario: ${usuario}`);
 
     if (usuario.contrasenia !== contrasenia) {
-      res.status(401).json({ mensaje: "Nombre o contrasenia incorrectos" });
+      res.status(401).json("Nombre o contrasenia incorrectos");
       return;
     }
 
     res.status(200).send(usuario);
   } catch (error) {
-    res.status(500).send("Error al logear");
+    res.status(500).json("Error al logear");
   }
 });
 
@@ -32,12 +32,6 @@ router.post("/", async (req, res) => {
     console.log("Method: POST\nURI: /v1/usuario");
 
     const { nombre, contrasenia, email, fecha_de_nacimiento } = req.body;
-    
-    if (!nombre || !contrasenia || !email || !fecha_de_nacimiento) {
-      console.warn("Faltan campos obligatorios");
-      return res.status(400).json({ mensaje: "Faltan campos obligatorios" });
-    }
-
     console.log(
       `
       nombre: ${nombre},
@@ -57,11 +51,7 @@ router.post("/", async (req, res) => {
 
     res.status(200).send(nuevo_usuario);
   } catch (error) {
-    console.error("Error al crear el usuario:", error);
-    res.status(500).json({
-      mensaje: "Error al crear el usuario",
-      detalle: error.message,
-    });
+    res.status(500).json("Error al crear el usuario");
   }
 });
 
@@ -78,7 +68,7 @@ router.get("/:id_usuario", async (req, res) => {
 
     res.status(200).send(usuario);
   } catch (error) {
-    res.status(500).send("Error al obtener el usuario");
+    res.status(500).json("Error al obtener el usuario");
   }
 });
 
@@ -97,7 +87,7 @@ router.get("/:id_usuario/finales", async (req, res) => {
 
     res.status(200).send(finales);
   } catch (error) {
-    res.status(500).send("Error al obtener los finales del usuario");
+    res.status(500).json("Error al obtener los finales del usuario");
   }
 });
 
@@ -113,7 +103,7 @@ router.put("/:id_usuario", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -133,7 +123,7 @@ router.put("/:id_usuario", async (req, res) => {
 
     res.status(200).send(usuario_actualizado);
   } catch (error) {
-    res.status(500).send("Error al actualizar el usuario");
+    res.status(500).json("Error al actualizar el usuario");
   }
 });
 
@@ -150,7 +140,7 @@ router.delete("/:id_usuario", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -159,9 +149,9 @@ router.delete("/:id_usuario", async (req, res) => {
 
     await usuario_service.deleteUsuarioById(id_usuario);
 
-    res.status(200).send("OK");
+    res.status(200).json("OK");
   } catch (error) {
-    res.status(500).send("Error al eliminar el usuario");
+    res.status(500).json("Error al eliminar el usuario");
   }
 });
 

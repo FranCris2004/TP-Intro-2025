@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     console.log(`Response: ${res_body}`);
     res.send(res_body);
   } catch (error) {
-    res.status(500).send("Error al obtener todas las aventuras");
+    res.status(500).json("Error al obtener todas las aventuras");
   }
 });
 
