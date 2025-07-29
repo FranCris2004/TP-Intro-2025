@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
 
     res.send(nueva_aventura);
   } catch (error) {
-    res.status(500).send("Error al agregar una aventura");
+    res.status(500).json("Error al agregar una aventura");
   }
 });
 
@@ -58,7 +58,7 @@ router.post("/:id_aventura/pagina", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -84,7 +84,7 @@ router.post("/:id_aventura/pagina", async (req, res) => {
 
     res.send(nueva_pagina);
   } catch (error) {
-    res.status(500).send("Error al crear la pagina");
+    res.status(500).json("Error al crear la pagina");
   }
 });
 
@@ -102,7 +102,7 @@ router.post("/:id_aventura/:numero_pagina/opcion", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -132,7 +132,7 @@ router.post("/:id_aventura/:numero_pagina/opcion", async (req, res) => {
 
     res.send(nueva_opcion);
   } catch (error) {
-    res.status(500).send("Error al crear la opcion");
+    res.status(500).json("Error al crear la opcion");
   }
 });
 
@@ -149,7 +149,7 @@ router.get("/:id_aventura", async (req, res) => {
 
     res.send(aventura);
   } catch (error) {
-    res.status(500).send("Error al obtener la aventura");
+    res.status(500).json("Error al obtener la aventura");
   }
 });
 
@@ -169,7 +169,7 @@ router.get("/:id_aventura/:numero_pagina", async (req, res) => {
 
     res.send(pagina);
   } catch (error) {
-    res.status(500).send("Error al obtener la pagina");
+    res.status(500).json("Error al obtener la pagina");
   }
 });
 
@@ -194,7 +194,7 @@ router.get("/:id_aventura/:numero_pagina/opciones", async (req, res) => {
 
     res.send(opciones);
   } catch (error) {
-    res.status(500).send("Error al obtener las opciones de la pagina");
+    res.status(500).json("Error al obtener las opciones de la pagina");
   }
 });
 
@@ -210,7 +210,7 @@ router.put("/:id_aventura", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -239,7 +239,7 @@ router.put("/:id_aventura", async (req, res) => {
 
     res.status(200).send(aventura_actualizada);
   } catch (error) {
-    res.status(500).send("Fallo al actualizar la aventura");
+    res.status(500).json("Fallo al actualizar la aventura");
   }
 });
 
@@ -255,7 +255,7 @@ router.put("/:id_aventura/:numero_pagina", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -283,7 +283,7 @@ router.put("/:id_aventura/:numero_pagina", async (req, res) => {
 
     res.send(pagina_actualizada);
   } catch (error) {
-    res.status(500).send("Error al crear la pagina");
+    res.status(500).json("Error al crear la pagina");
   }
 });
 
@@ -301,7 +301,7 @@ router.put("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -329,7 +329,7 @@ router.put("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
 
     res.send(opcion_actualizada);
   } catch (error) {
-    res.status(500).send("Error al crear la opcion");
+    res.status(500).json("Error al crear la opcion");
   }
 });
 
@@ -345,7 +345,7 @@ router.delete("/:id_aventura", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -353,9 +353,9 @@ router.delete("/:id_aventura", async (req, res) => {
     console.log(`id_aventura: ${id_aventura}`);
 
     await aventura_service.deleteAventuraById(id_aventura);
-    res.status(200).send("OK");
+    res.status(200).json("OK");
   } catch (error) {
-    res.status(500).send("Error al eliminar la aventura");
+    res.status(500).json("Error al eliminar la aventura");
   }
 });
 
@@ -373,7 +373,7 @@ router.delete("/:id_aventura/:numero_pagina", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -384,9 +384,9 @@ router.delete("/:id_aventura/:numero_pagina", async (req, res) => {
     console.log(`numero_pagina: ${numero_pagina}`);
 
     await pagina_service.deletePaginaByNumero(id_aventura, numero_pagina);
-    res.status(200).send("OK");
+    res.status(200).json("OK");
   } catch (error) {
-    res.status(500).send("Error al eliminar la pagina");
+    res.status(500).json("Error al eliminar la pagina");
   }
 });
 
@@ -404,7 +404,7 @@ router.delete("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).send("Unauthorized");
+      res.status(401).json("Unauthorized");
       return;
     }
 
@@ -423,9 +423,9 @@ router.delete("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
     console.log(`id_opcion: ${id_opcion}`);
 
     await opcion_service.deleteOpcionById(id_opcion);
-    res.status(200).send("OK");
+    res.status(200).json("OK");
   } catch (error) {
-    res.status(500).send("Error al eliminar la opcion");
+    res.status(500).json("Error al eliminar la opcion");
   }
 });
 
