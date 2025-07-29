@@ -16,11 +16,11 @@ router.post("/login", async (req, res) => {
       `
     );
 
-    const usuario = usuario_service.getUsuarioByNombre(nombre);
+    const usuario = await usuario_service.getUsuarioByNombre(nombre);
     console.log(`usuario: ${usuario}`);
 
     if (usuario.contrasenia !== contrasenia) {
-      res.status(401).send("Nombre o contrasenia incorrectos");
+      res.status(401).json({ mensaje: "Nombre o contrasenia incorrectos" });
       return;
     }
 

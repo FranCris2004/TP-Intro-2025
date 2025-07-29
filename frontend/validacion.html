@@ -48,7 +48,24 @@
           <div class="overlay"></div>
       </div>
   </div>
-    <script type="module" src="JS/registro.js"></script>
+<script type="module" src="JS/registro.js"></script>
+<script>
+    function mostrarFormulario(tipo) {
+  const login = document.getElementById('form-login');
+  const registro = document.getElementById('form-registro');
 
+  if (tipo === 'login') {
+  login.classList.add('active'); /*Añade una clase CSS (active) al elemento (login).*/
+  registro.classList.remove('active'); /*Elimina una clase CSS (active) del elemento (registro).*/
+  } else if (tipo === 'registro') {
+  login.classList.remove('active');
+  registro.classList.add('active');
+  } else {
+  // Por defecto mostrar login
+  login.classList.add('active');
+  registro.classList.remove('active');
+  }
+}
+</script>
 </body>
 </html>

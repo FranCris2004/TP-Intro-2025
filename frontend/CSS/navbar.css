@@ -46,6 +46,7 @@ html {
   text-decoration: none;
   color: var(--negro-a);
   font-size: 17px;
+  font-family: 'Lato-Regular', sans-serif;
   position: relative;
   transition: color var(--transition);
 }
