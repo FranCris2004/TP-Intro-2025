@@ -142,10 +142,15 @@ async function deleteAventuraById(id) {
 }
 
 async function validateIdAventura(id) {
-  return (
-    (await conn.query("SELECT 1 FROM aventura WHERE id = $1 LIMIT 1", [id]))
-      .rowCount !== 0
-  );
+  try {
+    return (
+      (await conn.query("SELECT 1 FROM aventura WHERE id = $1 LIMIT 1", [id]))
+        .rowCount !== 0
+    );
+  } catch (error) {
+    console.log("Error en validateIdAventura", error);
+    throw error;
+  }
 }
 
 export default {
