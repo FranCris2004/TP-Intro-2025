@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
       autor_id,
       genero
     );
-    console.log(`Response: ${nueva_aventura}`);
+    console.log(`Response: ${JSON.stringify(nueva_aventura)}`);
 
     res.send(nueva_aventura);
   } catch (error) {
@@ -80,7 +80,7 @@ router.post("/:id_aventura/pagina", async (req, res) => {
       contenido,
       imagen
     );
-    console.log(`Response: ${nueva_pagina}`);
+    console.log(`Response: ${JSON.stringify(nueva_pagina)}`);
 
     res.send(nueva_pagina);
   } catch (error) {
@@ -128,7 +128,7 @@ router.post("/:id_aventura/:numero_pagina/opcion", async (req, res) => {
       numero_pagina,
       numero_pagina_destino
     );
-    console.log(`Response: ${nueva_opcion}`);
+    console.log(`Response: ${JSON.stringify(nueva_opcion)}`);
 
     res.send(nueva_opcion);
   } catch (error) {
@@ -145,7 +145,7 @@ router.get("/:id_aventura", async (req, res) => {
     console.log(`id_aventura: ${id_aventura}`);
 
     const aventura = aventura_service.getAventuraById(id_aventura);
-    console.log(`Response: ${aventura}`);
+    console.log(`Response: ${JSON.stringify(aventura)}`);
 
     res.send(aventura);
   } catch (error) {
@@ -165,7 +165,7 @@ router.get("/:id_aventura/:numero_pagina", async (req, res) => {
     console.log(`numero_pagina: ${numero_pagina}`);
 
     const pagina = pagina_service.getPaginaByNumero(id_aventura, numero_pagina);
-    console.log(`Response: ${pagina}`);
+    console.log(`Response: ${JSON.stringify(pagina)}`);
 
     res.send(pagina);
   } catch (error) {
@@ -190,7 +190,7 @@ router.get("/:id_aventura/:numero_pagina/opciones", async (req, res) => {
       id_aventura,
       numero_pagina
     );
-    console.log(`Response: ${opciones}`);
+    console.log(`Response: ${JSON.stringify(opciones)}`);
 
     res.send(opciones);
   } catch (error) {
@@ -235,7 +235,7 @@ router.put("/:id_aventura", async (req, res) => {
       genero,
       portada
     );
-    console.log(`Response: ${aventura_actualizada}`);
+    console.log(`Response: ${JSON.stringify(aventura_actualizada)}`);
 
     res.status(200).send(aventura_actualizada);
   } catch (error) {
@@ -279,7 +279,7 @@ router.put("/:id_aventura/:numero_pagina", async (req, res) => {
       contenido,
       imagen
     );
-    console.log(`Response: ${pagina_actualizada}`);
+    console.log(`Response: ${JSON.stringify(pagina_actualizada)}`);
 
     res.send(pagina_actualizada);
   } catch (error) {
@@ -325,7 +325,7 @@ router.put("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
       descripcion,
       numero_pagina_destino
     );
-    console.log(`Response: ${opcion_actualizada}`);
+    console.log(`Response: ${JSON.stringify(opcion_actualizada)}`);
 
     res.send(opcion_actualizada);
   } catch (error) {
