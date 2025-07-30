@@ -131,7 +131,6 @@ router.put("/:id_usuario", async (req, res) => {
 router.delete("/:id_usuario", async (req, res) => {
   try {
     console.log(`Eliminar usuario ${req.params.id_usuario}`);
-    res.status(501).send("Error al eliminar el usuario");
 
     const autorizado = await usuario_service.validateContrasenia(
       req.body.auth.id,
