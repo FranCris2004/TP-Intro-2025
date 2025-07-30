@@ -146,7 +146,7 @@ async function updateUsuarioById(
       ]);
 
     if (contrasenia)
-      await conn.query("UPDATE usuario SET contrasenia= $2 WHERE id = $1", [
+      await conn.query("UPDATE usuario SET contrasenia = $2 WHERE id = $1", [
         id,
         contrasenia,
       ]);
