@@ -4,7 +4,7 @@ import pagina_service from "../services/pagina_service.js";
 
 const router = Router();
 
-// POST /v1/usuario//login
+// POST /v1/usuario/login
 router.post("/login", async (req, res) => {
   try {
     console.log("Method: POST\nURI: /v1/usuario/login");
