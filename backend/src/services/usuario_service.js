@@ -136,7 +136,7 @@ async function updateUsuarioById(
   try {
     if (!id) throw new Error("ID de usuario requerido");
 
-    if (validateIdUsuario(id) == false)
+    if (await validateIdUsuario(id) == false)
       throw new Error("Usuario no encontrado");
 
     if (nombre)
