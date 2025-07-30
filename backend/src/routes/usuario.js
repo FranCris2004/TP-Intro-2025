@@ -13,12 +13,11 @@ router.post("/login", async (req, res) => {
     console.log(`nombre: ${nombre}`);
 
     const usuario = await usuario_service.getUsuarioByNombre(nombre);
-    console.log(`usuario: ${usuario}`);
-
     if (usuario.contrasenia !== contrasenia) {
       res.status(401).json("Nombre o contrasenia incorrectos");
       return;
     }
+    console.log(`Response: ${usuario}`);
 
     res.status(200).send(usuario);
   } catch (error) {
@@ -136,7 +135,7 @@ router.put("/:id_usuario", async (req, res) => {
 router.delete("/:id_usuario", async (req, res) => {
   try {
     console.log(`Eliminar usuario ${req.params.id_usuario}`);
-    
+
     const id_usuario = req.params.id_usuario;
     console.log(`id_usuario: ${id_usuario}`);
 
