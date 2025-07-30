@@ -96,6 +96,14 @@ router.put("/:id_usuario", async (req, res) => {
   try {
     console.log("Method: PUT\nURI: /v1/usuario/:id_usuario");
 
+    const id_usuario = req.params.id_usuario;
+    console.log(`id_usuario: ${id_usuario}`);
+
+    if (id_usuario != req.body.auth.id) {
+      res.status(400).send("La id de usuario en la URI y en auth no coinciden");
+      return;
+    }
+
     const autorizado = await usuario_service.validateContrasenia(
       req.body.auth.id,
       req.body.auth.contrasenia
@@ -106,9 +114,6 @@ router.put("/:id_usuario", async (req, res) => {
       res.status(401).json("Unauthorized");
       return;
     }
-
-    const id_usuario = req.params.id_usuario;
-    console.log(`id_usuario: ${id_usuario}`);
 
     const { nueva_contrasenia, nombre, email, fecha_de_nacimiento } = req.body;
 
@@ -131,6 +136,14 @@ router.put("/:id_usuario", async (req, res) => {
 router.delete("/:id_usuario", async (req, res) => {
   try {
     console.log(`Eliminar usuario ${req.params.id_usuario}`);
+    
+    const id_usuario = req.params.id_usuario;
+    console.log(`id_usuario: ${id_usuario}`);
+
+    if (id_usuario != req.body.auth.id) {
+      res.status(400).send("La id de usuario en la URI y en auth no coinciden");
+      return;
+    }
 
     const autorizado = await usuario_service.validateContrasenia(
       req.body.auth.id,
@@ -142,9 +155,6 @@ router.delete("/:id_usuario", async (req, res) => {
       res.status(401).json("Unauthorized");
       return;
     }
-
-    const id_usuario = req.params.id_usuario;
-    console.log(`id_usuario: ${id_usuario}`);
 
     await usuario_service.deleteUsuarioById(id_usuario);
 
