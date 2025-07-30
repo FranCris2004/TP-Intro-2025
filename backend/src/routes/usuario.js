@@ -17,7 +17,7 @@ router.post("/login", async (req, res) => {
       res.status(401).json("Nombre o contrasenia incorrectos");
       return;
     }
-    console.log(`Response: ${usuario}`);
+    console.log(`Response: ${JSON.stringify(usuario)}`);
 
     res.status(200).send(usuario);
   } catch (error) {
@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
       email,
       fecha_de_nacimiento
     );
-    console.log(`Response: ${nuevo_usuario}`);
+    console.log(`Response: ${JSON.stringify(nuevo_usuario)}`);
 
     res.status(200).send(nuevo_usuario);
   } catch (error) {
@@ -63,7 +63,7 @@ router.get("/:id_usuario", async (req, res) => {
     console.log(`id_usuario: ${id_usuario}`);
 
     const usuario = await usuario_service.getUsuarioById(id_usuario);
-    console.log(`Response: ${usuario}`);
+    console.log(`Response: ${JSON.stringify(usuario)}`);
 
     res.status(200).send(usuario);
   } catch (error) {
@@ -82,7 +82,7 @@ router.get("/:id_usuario/finales", async (req, res) => {
     const finales = await pagina_service.getAllPaginasFinalesByUsuarioId(
       id_usuario
     );
-    console.log(`Response: ${finales}`);
+    console.log(`Response: ${JSON.stringify(finales)}`);
 
     res.status(200).send(finales);
   } catch (error) {
@@ -123,7 +123,7 @@ router.put("/:id_usuario", async (req, res) => {
       email || null,
       fecha_de_nacimiento || null
     );
-    console.log(`Response: ${usuario_actualizado}`);
+    console.log(`Response: ${JSON.stringify(usuario_actualizado)}`);
 
     res.status(200).send(usuario_actualizado);
   } catch (error) {
