@@ -159,8 +159,8 @@ async function updateUsuarioById(
 
     if (fecha_de_nacimiento)
       await conn.query(
-        "UPDATE usuario SET fecha_nacimiento = $2 WHERE id = $1",
-        [id, fecha_nacimiento]
+        "UPDATE usuario SET fecha_de_nacimiento = $2 WHERE id = $1",
+        [id, fecha_de_nacimiento]
       );
 
     return await getUsuarioById(id);
