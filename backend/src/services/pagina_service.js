@@ -34,16 +34,21 @@ async function createPagina(
       [id_aventura, numero, titulo.trim(), contenido.trim(), imagen]
     );
 
-    const { id, id_aventura: idAv, numero: num, titulo: tit, contenido: cont, imagen: img } = res.rows[0];
-    
-    return new Pagina(id, idAv, num, tit, cont, img);
+    const {
+      id,
+      id_aventura: idAv,
+      numero: num,
+      titulo: tit,
+      contenido: cont,
+      imagen: img,
+    } = res.rows[0];
 
+    return new Pagina(id, idAv, num, tit, cont, img);
   } catch (error) {
     console.error("Error en createPagina:", error);
     throw error;
   }
 }
-
 
 //
 // Read
@@ -56,13 +61,13 @@ async function getPaginaById(id) {
     if (res.rowCount === 0) throw new Error("Pagina no encontrada");
 
     return new Pagina(
-          res.rows[0].id,
-          res.rows[0].titulo,
-          res.rows[0].id_aventura,
-          res.rows[0].numero,
-          res.rows[0].contenido,
-          res.rows[0].imagen
-        );
+      res.rows[0].id,
+      res.rows[0].titulo,
+      res.rows[0].id_aventura,
+      res.rows[0].numero,
+      res.rows[0].contenido,
+      res.rows[0].imagen
+    );
   } catch (error) {
     console.error("Error en getPaginaById:", error);
     throw error;
@@ -71,18 +76,21 @@ async function getPaginaById(id) {
 
 async function getPaginaByNumero(id_aventura, numero) {
   try {
-    const res = await conn.query( "SELECT * FROM pagina WHERE id_aventura = $1 AND numero = $2",[id_aventura, numero]);
+    const res = await conn.query(
+      "SELECT * FROM pagina WHERE id_aventura = $1 AND numero = $2",
+      [id_aventura, numero]
+    );
 
     if (res.rowCount === 0) throw new Error("Página no encontrada");
 
     return new Pagina(
-          res.rows[0].id,
-          res.rows[0].titulo,
-          res.rows[0].id_aventura,
-          res.rows[0].numero,
-          res.rows[0].contenido,
-          res.rows[0].imagen
-        );
+      res.rows[0].id,
+      res.rows[0].titulo,
+      res.rows[0].id_aventura,
+      res.rows[0].numero,
+      res.rows[0].contenido,
+      res.rows[0].imagen
+    );
   } catch (error) {
     throw new Error("Error en getPaginaByNumero", error);
   }
@@ -107,7 +115,7 @@ async function getAllPaginasFinalesByUsuarioId(id_usuario) {
           row.id_aventura,
           row.titulo,
           row.contenido,
-          row.imagen,
+          row.imagen
         )
     );
   } catch (error) {
@@ -127,7 +135,12 @@ async function validateIdPagina(id) {
   );
 }
 
-async function updatePaginaById(id, titulo = null, contenido = null, imagen = null) {
+async function updatePaginaById(
+  id,
+  titulo = null,
+  contenido = null,
+  imagen = null
+) {
   try {
     // Validación mejorada del ID
     if (!id || isNaN(parseInt(id))) {
@@ -182,7 +195,6 @@ async function updatePaginaById(id, titulo = null, contenido = null, imagen = nu
 
     // Retornar la página actualizada
     return await getPaginaById(id);
-
   } catch (error) {
     console.error(`Error en updatePaginaById [ID:${id}]:`, error);
     throw error;
@@ -190,11 +202,23 @@ async function updatePaginaById(id, titulo = null, contenido = null, imagen = nu
 }
 
 async function validatePaginaByNumero(id_aventura, numero) {
-  return (await conn.query("SELECT 1 FROM pagina WHERE id_aventura = $1 AND numero = $2 LIMIT 1",[id_aventura, numero])).rowCount !== 0;
+  return (
+    (
+      await conn.query(
+        "SELECT 1 FROM pagina WHERE id_aventura = $1 AND numero = $2 LIMIT 1",
+        [id_aventura, numero]
+      )
+    ).rowCount !== 0
+  );
 }
 
-
-async function updatePaginaByNumero(id_aventura, numero, titulo = null, contenido = null, imagen = null) {
+async function updatePaginaByNumero(
+  id_aventura,
+  numero,
+  titulo = null,
+  contenido = null,
+  imagen = null
+) {
   try {
     if (!id_aventura || isNaN(parseInt(id_aventura))) {
       throw new Error("id_aventura debe ser un número válido");
@@ -207,7 +231,9 @@ async function updatePaginaByNumero(id_aventura, numero, titulo = null, contenid
     numero = parseInt(numero);
 
     if (!(await validatePaginaByNumero(id_aventura, numero))) {
-      throw new Error(`Página no encontrada (Aventura: ${id_aventura}, Número: ${numero})`);
+      throw new Error(
+        `Página no encontrada (Aventura: ${id_aventura}, Número: ${numero})`
+      );
     }
 
     const updates = [];
@@ -263,9 +289,11 @@ async function updatePaginaByNumero(id_aventura, numero, titulo = null, contenid
       row.contenido,
       row.imagen
     );
-
   } catch (error) {
-    console.error(`Error en updatePaginaByNumero [Aventura:${id_aventura}, Número:${numero}]:`, error);
+    console.error(
+      `Error en updatePaginaByNumero [Aventura:${id_aventura}, Número:${numero}]:`,
+      error
+    );
     throw error;
   }
 }
@@ -274,7 +302,26 @@ async function updatePaginaByNumero(id_aventura, numero, titulo = null, contenid
 // Delete
 //
 
-async function deletePaginaById(id) {  
+async function existeOpcionAPagina(id_aventura, numero) {
+  try {
+    const res = await conn.query(`
+      SELECT EXISTS (
+        SELECT 1
+        FROM opcion
+        WHERE
+          id_aventura = $1 AND numero_pagina_destino = $2
+        LIMIT 1
+      ) AS existe
+      `);
+
+    return res.rows[0].existe;
+  } catch (error) {
+    console.error("Error en deletePaginaByNumero:", error);
+    throw error;
+  }
+}
+
+async function deletePaginaById(id) {
   try {
     const res = await conn.query("DELETE FROM pagina WHERE id = $1", [id]);
 
@@ -290,14 +337,19 @@ async function deletePaginaByNumero(id_aventura, numero) {
     if (!id_aventura || !numero)
       throw new Error("id_aventura y número de página son requeridos");
 
+    if (await existeOpcionAPagina(id_aventura, numero)) {
+      const MESSAGE = "Existe una opcion apuntando a esa pagina";
+      console.log(MESSAGE);
+      res.status(400).json(MESSAGE);
+      return;
+    }
+
     const res = await conn.query(
       "DELETE FROM pagina WHERE id_aventura = $1 AND numero = $2 ",
       [id_aventura, numero]
     );
 
-    if (res.rowCount === 0)
-      throw new Error("Página no encontrada");
-
+    if (res.rowCount === 0) throw new Error("Página no encontrada");
   } catch (error) {
     console.error("Error en deletePaginaByNumero:", error);
     throw error;
@@ -312,5 +364,5 @@ export default {
   updatePaginaById,
   updatePaginaByNumero,
   deletePaginaById,
-  deletePaginaByNumero
+  deletePaginaByNumero,
 };
