@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
+                    auth: { id: usuario.id, contrasenia: actual },
                     nombre: nuevoNombre || null,
                     email: nuevoEmail || null,
                     fecha_de_nacimiento: nuevaFecha || null

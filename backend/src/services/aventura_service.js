@@ -36,9 +36,27 @@ async function createAventura(titulo, descripcion, autor_id, genero, portada) {
 async function getAllAventuras() {
   try {
     const res = await conn.query("SELECT * FROM aventura");
+<<<<<<< HEAD
     return res.rows.map(row => new Aventura(...Object.values(row)));
   } catch (error) {
     console.error("Error en getAllAventuras:", error);
+=======
+
+    return res.rows.map(
+      (row) =>
+        new Aventura(
+          row.id,
+          row.titulo,
+          row.descripcion,
+          row.autor_id,
+          row.genero,
+          row.fecha_creacion,
+          row.portada
+        )
+    );
+  } catch (error) {
+    console.error(`Error en getAllAventuras(): ${error.message}`);
+>>>>>>> 52bb0c45f45539c90915c774885a3755ab1980b6
     throw error;
   }
 }

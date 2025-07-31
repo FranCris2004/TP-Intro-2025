@@ -36,7 +36,11 @@ CREATE TABLE opcion (
     id_aventura INT NOT NULL REFERENCES aventura(id),
     descripcion VARCHAR(500) NOT NULL,
     numero_pagina_origen INT,
+<<<<<<< HEAD
     numero_pagina_destino INT 
+=======
+    numero_pagina_destino INT
+>>>>>>> 52bb0c45f45539c90915c774885a3755ab1980b6
 );
 
 -- relacion entre aventura y pagina

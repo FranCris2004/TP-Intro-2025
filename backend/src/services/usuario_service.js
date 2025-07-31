@@ -52,6 +52,7 @@ async function createUsuario(nombre, contrasenia, email, fecha_de_nacimiento) {
     return new Usuario(
       res.rows[0].id,
       res.rows[0].nombre,
+      res.rows[0].contrasenia,
       res.rows[0].email,
       res.rows[0].fecha_registro,
       res.rows[0].fecha_de_nacimiento
@@ -75,6 +76,7 @@ async function getAllUsuarios() {
         new Usuario(
           row.id,
           row.nombre,
+          row.contrasenia,
           row.email,
           row.fecha_registro,
           row.fecha_de_nacimiento
@@ -92,7 +94,18 @@ async function getUsuarioById(id) {
 
     if (res.rowCount === 0) throw new Error("Usuario no encontrado");
 
+<<<<<<< HEAD
     return res.rows[0];
+=======
+    return new Usuario(
+      res.rows[0].id,
+      res.rows[0].nombre,
+      res.rows[0].contrasenia,
+      res.rows[0].email,
+      res.rows[0].fecha_registro,
+      res.rows[0].fecha_de_nacimiento
+    );
+>>>>>>> 52bb0c45f45539c90915c774885a3755ab1980b6
   } catch (error) {
     console.error("Error en getUsuarioById:", error);
     throw error;
@@ -101,11 +114,24 @@ async function getUsuarioById(id) {
 
 async function getUsuarioByNombre(nombre) {
   try {
-    const res = await conn.query("SELECT * FROM usuario WHERE nombre = $1", [nombre]);
+    const res = await conn.query("SELECT * FROM usuario WHERE nombre = $1", [
+      nombre,
+    ]);
 
     if (res.rowCount === 0) throw new Error("Usuario no encontrado");
 
+<<<<<<< HEAD
     return res.rows[0];
+=======
+    return new Usuario(
+      res.rows[0].id,
+      res.rows[0].nombre,
+      res.rows[0].contrasenia,
+      res.rows[0].email,
+      res.rows[0].fecha_registro,
+      res.rows[0].fecha_de_nacimiento
+    );
+>>>>>>> 52bb0c45f45539c90915c774885a3755ab1980b6
   } catch (error) {
     console.error("Error en getUsuarioByNombre", error);
     throw error;
@@ -125,7 +151,11 @@ async function updateUsuarioById(
   try {
     if (!id) throw new Error("ID de usuario requerido");
 
+<<<<<<< HEAD
     if (await validateIdUsuario(id) == false) // <-- FALTA await
+=======
+    if ((await validateIdUsuario(id)) == false)
+>>>>>>> 52bb0c45f45539c90915c774885a3755ab1980b6
       throw new Error("Usuario no encontrado");
 
     if (nombre)
