@@ -15,9 +15,9 @@ app.use([
   json({ limit: "10mb" }),
   cors({
     origin: "*",
-    methods: ["POST", "GET", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type"],
-    credentials: false,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: "*",
+    credentials: true
   }),
   (req, res, next) => {
     res.set(

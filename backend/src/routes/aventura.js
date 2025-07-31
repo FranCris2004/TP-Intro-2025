@@ -2,49 +2,45 @@ import { Router } from "express";
 import aventura_service from "../services/aventura_service.js";
 import pagina_service from "../services/pagina_service.js";
 import opcion_service from "../services/opcion_service.js";
+import usuario_service from "../services/usuario_service.js";
 
 const router = Router();
 
 // POST /v1/aventura
 router.post("/", async (req, res) => {
   try {
-    console.log("Method: POST\nURI: /v1/aventura");
+    console.log("POST /v1/aventura body:", req.body);
 
     const autorizado = await usuario_service.validateContrasenia(
-      req.body.auth.id,
+      req.body.auth.id_usuario, // <-- cambio importante
       req.body.auth.contrasenia
     );
+
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).json("Unauthorized");
-      return;
+      return res.status(401).json("Unauthorized");
     }
 
-    const { titulo, descripcion, autor_id, genero, portada } = req.body;
-    console.log(
-      `
-      titulo: ${titulo},
-      descripcion: ${descripcion},
-      autor_id: ${autor_id},
-      genero: ${genero},
-      portada: ${portada}
-      `
-    );
+    const { titulo, descripcion = "", genero, portada = "" } = req.body;
 
     const nueva_aventura = await aventura_service.createAventura(
       titulo,
       descripcion,
-      autor_id,
-      genero
+      req.body.auth.id_usuario,
+      genero,
+      portada
     );
-    console.log(`Response: ${JSON.stringify(nueva_aventura)}`);
 
-    res.status(200).send(nueva_aventura);
+    console.log(`Response:`, nueva_aventura);
+    res.status(201).json(nueva_aventura);
+
   } catch (error) {
+    console.error("Error en POST /v1/aventura:", error);
     res.status(500).json("Error al agregar una aventura");
   }
 });
+
 
 // POST /v1/aventura/:id_aventura/pagina
 router.post("/:id_aventura/pagina", async (req, res) => {
@@ -58,8 +54,7 @@ router.post("/:id_aventura/pagina", async (req, res) => {
     console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).json("Unauthorized");
-      return;
+      return res.status(401).json("Unauthorized");
     }
 
     const { id_aventura, numero, titulo, contenido, imagen } = req.body;
@@ -73,7 +68,7 @@ router.post("/:id_aventura/pagina", async (req, res) => {
         `
     );
 
-    const nueva_pagina = pagina_service.createPagina(
+    const nueva_pagina = await pagina_service.createPagina(
       id_aventura,
       numero,
       titulo,
@@ -84,7 +79,8 @@ router.post("/:id_aventura/pagina", async (req, res) => {
 
     res.status(200).send(nueva_pagina);
   } catch (error) {
-    res.status(500).json("Error al crear la pagina");
+    console.error("Error en POST /pagina:", error);
+    return res.status(500).json({ error: "Error al crear la pagina" });
   }
 });
 
@@ -246,33 +242,25 @@ router.put("/:id_aventura", async (req, res) => {
 // PUT /v1/aventura/:id_aventura/:numero_pagina
 router.put("/:id_aventura/:numero_pagina", async (req, res) => {
   try {
-    console.log("Method: POST\nURI: /v1/aventura/:id_aventura/pagina");
+    console.log("Method: PUT\nURI: /v1/aventura/:id_aventura/:numero_pagina");
 
     const autorizado = await usuario_service.validateContrasenia(
       req.body.auth.id,
       req.body.auth.contrasenia
     );
-    console.log(`Autorizado: ${autorizado}`);
 
     if (!autorizado) {
-      res.status(401).json("Unauthorized");
-      return;
+      return res.status(401).json("Unauthorized");
     }
 
-    const numero_pagina = req.params.numero_pagina;
-    console.log(`numero_pagina: ${numero_pagina}`);
+    const id_aventura = parseInt(req.params.id_aventura, 10);
+    const numero_pagina = parseInt(req.params.numero_pagina, 10);
 
-    const { id_aventura, titulo, contenido, imagen } = req.body;
-    console.log(
-      `
-        id_aventura: ${id_aventura},
-        titulo: ${titulo},
-        contenido: ${contenido},
-        imagen: ${imagen}
-        `
-    );
+    console.log(`id_aventura: ${id_aventura} (${typeof id_aventura}), numero_pagina: ${numero_pagina} (${typeof numero_pagina})`);
 
-    const pagina_actualizada = pagina_service.updatePaginaByNumero(
+    const { titulo, contenido, imagen } = req.body;
+
+    const pagina_actualizada = await pagina_service.updatePaginaByNumero(
       id_aventura,
       numero_pagina,
       titulo,
@@ -283,9 +271,12 @@ router.put("/:id_aventura/:numero_pagina", async (req, res) => {
 
     res.status(200).send(pagina_actualizada);
   } catch (error) {
-    res.status(500).json("Error al crear la pagina");
+    console.error("Error en PUT /:id_aventura/:numero_pagina:", error);
+    res.status(500).json("Error al actualizar la página");
   }
 });
+
+
 
 // PUT /v1/aventura/:id_aventura/:numero_pagina/:id_opcion
 router.put("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
