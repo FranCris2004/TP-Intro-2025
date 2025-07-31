@@ -16,8 +16,6 @@ async function validateContrasenia(id, contrasenia) {
   try {
     const usuario = await getUsuarioById(id);
 
-    console.log("Contraseña DB:", usuario.contrasenia);
-    console.log("Contraseña enviada:", contrasenia);
     return usuario.contrasenia === contrasenia;
   } catch (error) {
     console.log("Error en validateContrasenia:", error);
@@ -92,7 +90,13 @@ async function getUsuarioById(id) {
 
     if (res.rowCount === 0) throw new Error("Usuario no encontrado");
 
-    return res.rows[0];
+    return new Usuario(
+      res.rows[0].id,
+      res.rows[0].nombre,
+      res.rows[0].email,
+      res.rows[0].fecha_registro,
+      res.rows[0].fecha_de_nacimiento
+    );
   } catch (error) {
     console.error("Error en getUsuarioById:", error);
     throw error;
@@ -105,7 +109,13 @@ async function getUsuarioByNombre(nombre) {
 
     if (res.rowCount === 0) throw new Error("Usuario no encontrado");
 
-    return res.rows[0];
+    return new Usuario(
+      res.rows[0].id,
+      res.rows[0].nombre,
+      res.rows[0].email,
+      res.rows[0].fecha_registro,
+      res.rows[0].fecha_de_nacimiento
+    );
   } catch (error) {
     console.error("Error en getUsuarioByNombre", error);
     throw error;
@@ -115,6 +125,7 @@ async function getUsuarioByNombre(nombre) {
 //
 // Update
 //
+
 async function updateUsuarioById(
   id,
   nombre,
@@ -125,7 +136,7 @@ async function updateUsuarioById(
   try {
     if (!id) throw new Error("ID de usuario requerido");
 
-    if (await validateIdUsuario(id) == false) // <-- FALTA await
+    if (await validateIdUsuario(id) == false)
       throw new Error("Usuario no encontrado");
 
     if (nombre)
@@ -148,7 +159,7 @@ async function updateUsuarioById(
 
     if (fecha_de_nacimiento)
       await conn.query(
-        "UPDATE usuario SET fecha_de_nacimiento = $2 WHERE id = $1", 
+        "UPDATE usuario SET fecha_de_nacimiento = $2 WHERE id = $1",
         [id, fecha_de_nacimiento]
       );
 
@@ -158,7 +169,6 @@ async function updateUsuarioById(
     throw error;
   }
 }
-
 
 //
 // Delete
