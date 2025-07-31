@@ -4,7 +4,7 @@ import pagina_service from "../services/pagina_service.js";
 
 const router = Router();
 
-// POST /v1/usuario//login
+// POST /v1/usuario/login
 router.post("/login", async (req, res) => {
   try {
     console.log("Method: POST\nURI: /v1/usuario/login");
@@ -13,12 +13,11 @@ router.post("/login", async (req, res) => {
     console.log(`nombre: ${nombre}`);
 
     const usuario = await usuario_service.getUsuarioByNombre(nombre);
-    console.log(`usuario: ${usuario}`);
-
     if (usuario.contrasenia !== contrasenia) {
       res.status(401).json("Nombre o contrasenia incorrectos");
       return;
     }
+    console.log(`Response: ${JSON.stringify(usuario)}`);
 
     res.status(200).send(usuario);
   } catch (error) {
@@ -47,7 +46,7 @@ router.post("/", async (req, res) => {
       email,
       fecha_de_nacimiento
     );
-    console.log(`Response: ${nuevo_usuario}`);
+    console.log(`Response: ${JSON.stringify(nuevo_usuario)}`);
 
     res.status(200).send(nuevo_usuario);
   } catch (error) {
@@ -64,7 +63,7 @@ router.get("/:id_usuario", async (req, res) => {
     console.log(`id_usuario: ${id_usuario}`);
 
     const usuario = await usuario_service.getUsuarioById(id_usuario);
-    console.log(`Response: ${usuario}`);
+    console.log(`Response: ${JSON.stringify(usuario)}`);
 
     res.status(200).send(usuario);
   } catch (error) {
@@ -83,7 +82,7 @@ router.get("/:id_usuario/finales", async (req, res) => {
     const finales = await pagina_service.getAllPaginasFinalesByUsuarioId(
       id_usuario
     );
-    console.log(`Response: ${finales}`);
+    console.log(`Response: ${JSON.stringify(finales)}`);
 
     res.status(200).send(finales);
   } catch (error) {
@@ -96,6 +95,14 @@ router.put("/:id_usuario", async (req, res) => {
   try {
     console.log("Method: PUT\nURI: /v1/usuario/:id_usuario");
 
+    const id_usuario = req.params.id_usuario;
+    console.log(`id_usuario: ${id_usuario}`);
+
+    if (id_usuario != req.body.auth.id) {
+      res.status(400).send("La id de usuario en la URI y en auth no coinciden");
+      return;
+    }
+
     const autorizado = await usuario_service.validateContrasenia(
       req.body.auth.id,
       req.body.auth.contrasenia
@@ -107,9 +114,6 @@ router.put("/:id_usuario", async (req, res) => {
       return;
     }
 
-    const id_usuario = req.params.id_usuario;
-    console.log(`id_usuario: ${id_usuario}`);
-
     const { nueva_contrasenia, nombre, email, fecha_de_nacimiento } = req.body;
 
     const usuario_actualizado = await usuario_service.updateUsuarioById(
@@ -119,7 +123,7 @@ router.put("/:id_usuario", async (req, res) => {
       email || null,
       fecha_de_nacimiento || null
     );
-    console.log(`Response: ${usuario_actualizado}`);
+    console.log(`Response: ${JSON.stringify(usuario_actualizado)}`);
 
     res.status(200).send(usuario_actualizado);
   } catch (error) {
@@ -131,7 +135,14 @@ router.put("/:id_usuario", async (req, res) => {
 router.delete("/:id_usuario", async (req, res) => {
   try {
     console.log(`Eliminar usuario ${req.params.id_usuario}`);
-    res.status(501).send("Error al eliminar el usuario");
+
+    const id_usuario = req.params.id_usuario;
+    console.log(`id_usuario: ${id_usuario}`);
+
+    if (id_usuario != req.body.auth.id) {
+      res.status(400).send("La id de usuario en la URI y en auth no coinciden");
+      return;
+    }
 
     const autorizado = await usuario_service.validateContrasenia(
       req.body.auth.id,
@@ -143,9 +154,6 @@ router.delete("/:id_usuario", async (req, res) => {
       res.status(401).json("Unauthorized");
       return;
     }
-
-    const id_usuario = req.params.id_usuario;
-    console.log(`id_usuario: ${id_usuario}`);
 
     await usuario_service.deleteUsuarioById(id_usuario);
 

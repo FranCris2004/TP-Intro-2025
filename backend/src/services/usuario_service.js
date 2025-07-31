@@ -136,7 +136,7 @@ async function updateUsuarioById(
   try {
     if (!id) throw new Error("ID de usuario requerido");
 
-    if (validateIdUsuario(id) == false)
+    if (await validateIdUsuario(id) == false)
       throw new Error("Usuario no encontrado");
 
     if (nombre)
@@ -146,7 +146,7 @@ async function updateUsuarioById(
       ]);
 
     if (contrasenia)
-      await conn.query("UPDATE usuario SET contrasenia= $2 WHERE id = $1", [
+      await conn.query("UPDATE usuario SET contrasenia = $2 WHERE id = $1", [
         id,
         contrasenia,
       ]);
@@ -159,8 +159,8 @@ async function updateUsuarioById(
 
     if (fecha_de_nacimiento)
       await conn.query(
-        "UPDATE usuario SET fecha_nacimiento = $2 WHERE id = $1",
-        [id, fecha_nacimiento]
+        "UPDATE usuario SET fecha_de_nacimiento = $2 WHERE id = $1",
+        [id, fecha_de_nacimiento]
       );
 
     return await getUsuarioById(id);
