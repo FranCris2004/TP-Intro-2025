@@ -10,7 +10,11 @@ router.post("/login", async (req, res) => {
     console.log("Method: POST\nURI: /v1/usuario/login");
 
     const { nombre, contrasenia } = req.body;
-    console.log(`nombre: ${nombre}`);
+    console.log(
+      `
+      nombre: ${nombre}
+      contrasenia: ${contrasenia}`.trim()
+    );
 
     const usuario = await usuario_service.getUsuarioByNombre(nombre);
     if (usuario.contrasenia !== contrasenia) {
