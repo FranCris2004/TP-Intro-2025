@@ -151,11 +151,7 @@ async function updateUsuarioById(
   try {
     if (!id) throw new Error("ID de usuario requerido");
 
-<<<<<<< HEAD
-    if (await validateIdUsuario(id) == false) // <-- FALTA await
-=======
     if ((await validateIdUsuario(id)) == false)
->>>>>>> 52bb0c45f45539c90915c774885a3755ab1980b6
       throw new Error("Usuario no encontrado");
 
     if (nombre)
