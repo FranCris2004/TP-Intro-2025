@@ -4,7 +4,7 @@ export default class Opcion {
         if (typeof id !== "number" || !Number.isInteger(id) || id <= 0)
         throw new Error("id invalido: debe ser un entero positivo");
         
-        if (typeof descripcion !== "string" || titulo.length == 0)
+        if (typeof descripcion !== "string" || descripcion.length == 0)
             throw new Error("descripcion invalida: debe ser un string no vacio");
 
         if (typeof id_aventura !== "number" || !Number.isInteger(id_aventura) || id_aventura <= 0)
