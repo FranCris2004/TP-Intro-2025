@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
 
     const aventuras = await aventura_service.getAllAventuras();
 
-    res.status(200).send(aventuras);
+    res.status(200).json(aventuras);
   } catch (error) {
     console.error("Error al obtener aventuras:", error);
     res.status(500).json({ error: "Error al obtener todas las aventuras" });

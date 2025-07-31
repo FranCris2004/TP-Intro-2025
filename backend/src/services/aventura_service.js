@@ -44,7 +44,6 @@ async function createAventura(titulo, descripcion, autor_id, genero, portada) {
 async function getAllAventuras() {
   try {
     const res = await conn.query("SELECT * FROM aventura");
-<<<<<<< HEAD
 
     return res.rows.map(
       (row) =>
@@ -60,11 +59,6 @@ async function getAllAventuras() {
     );
   } catch (error) {
     console.error(`Error en getAllAventuras(): ${error.message}`);
-=======
-    return res.rows.map(row => new Aventura(...Object.values(row)));
-  } catch (error) {
-    console.error("Error en getAllAventuras:", error);
->>>>>>> 27fd7e1 (ya funciona crear aventura y agregar capitulos (aun falta terminar y pulir algunas cosas))
     throw error;
   }
 }
