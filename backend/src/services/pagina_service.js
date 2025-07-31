@@ -43,7 +43,14 @@ async function createPagina(
       imagen: img,
     } = res.rows[0];
 
-    return new Pagina(id, idAv, num, tit, cont, img);
+    return new Pagina(
+      res.rows[0].id,
+      res.rows[0].id_aventura,
+      res.rows[0].numero,
+      res.rows[0].titulo,
+      res.rows[0].contenido,
+      res.rows[0].imagen
+    );
   } catch (error) {
     console.error("Error en createPagina:", error);
     throw error;
@@ -62,9 +69,9 @@ async function getPaginaById(id) {
 
     return new Pagina(
       res.rows[0].id,
-      res.rows[0].titulo,
       res.rows[0].id_aventura,
       res.rows[0].numero,
+      res.rows[0].titulo,
       res.rows[0].contenido,
       res.rows[0].imagen
     );
@@ -85,9 +92,9 @@ async function getPaginaByNumero(id_aventura, numero) {
 
     return new Pagina(
       res.rows[0].id,
-      res.rows[0].titulo,
       res.rows[0].id_aventura,
       res.rows[0].numero,
+      res.rows[0].titulo,
       res.rows[0].contenido,
       res.rows[0].imagen
     );
@@ -113,6 +120,7 @@ async function getAllPaginasFinalesByUsuarioId(id_usuario) {
         new Pagina(
           row.id,
           row.id_aventura,
+          row.numero,
           row.titulo,
           row.contenido,
           row.imagen
