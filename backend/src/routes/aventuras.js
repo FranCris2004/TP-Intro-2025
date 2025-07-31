@@ -9,9 +9,9 @@ router.get("/", async (req, res) => {
     console.log("Method: GET\nURI: /v1/aventuras");
 
     const aventuras = await aventura_service.getAllAventuras();
-    const res_body = JSON.stringify(aventuras);
-    console.log(`Response: ${res_body}`);
-    res.send(res_body);
+    console.log(`Response: ${JSON.stringify(res_body)}`);
+
+    res.status(200).send(aventuras);
   } catch (error) {
     res.status(500).json("Error al obtener todas las aventuras");
   }

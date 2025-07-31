@@ -24,7 +24,15 @@ async function createAventura(titulo, descripcion, autor_id, genero, portada) {
       res.rows[0].portada
     );
   } catch (error) {
-    console.error("Error en createAventura:", error);
+    console.error(
+      `Error en createAventura(
+        ${titulo},
+        ${descripcion},
+        ${autor_id},
+        ${genero},
+        ${portada}
+      ): ${error.message}`.trim()
+    );
     throw error;
   }
 }
@@ -34,20 +42,25 @@ async function createAventura(titulo, descripcion, autor_id, genero, portada) {
 //
 
 async function getAllAventuras() {
-  const res = await conn.query("SELECT * FROM aventura");
+  try {
+    const res = await conn.query("SELECT * FROM aventura");
 
-  return res.rows.map(
-    (row) =>
-      new Aventura(
-        row.id,
-        row.titulo,
-        row.descripcion,
-        row.autor_id,
-        row.genero,
-        row.fecha_creacion,
-        row.portada
-      )
-  );
+    return res.rows.map(
+      (row) =>
+        new Aventura(
+          row.id,
+          row.titulo,
+          row.descripcion,
+          row.autor_id,
+          row.genero,
+          row.fecha_creacion,
+          row.portada
+        )
+    );
+  } catch (error) {
+    console.error(`Error en getAllAventuras(): ${error.message}`);
+    throw error;
+  }
 }
 
 async function getAventuraById(id) {
@@ -66,7 +79,7 @@ async function getAventuraById(id) {
       res.rows[0].portada
     );
   } catch (error) {
-    console.error("Error en getAventuraById:", error);
+    console.error(`Error en getAventuraById(${id}): ${error.message}`);
     throw error;
   }
 }
@@ -121,7 +134,16 @@ async function updateAventuraById(
 
     return getAventuraById(id);
   } catch (error) {
-    console.error("Error en updateAventuraById:", error);
+    console.error(
+      `Error en updateAventuraById(
+        ${id},
+        ${titulo},
+        ${descripcion},
+        ${autor_id},
+        ${genero},
+        ${portada}
+      ): ${error.message}`.trim()
+    );
     throw error;
   }
 }
@@ -136,16 +158,29 @@ async function deleteAventuraById(id) {
 
     if (res.rowCount === 0) throw new Error("Aventura no encontrada");
   } catch (error) {
-    console.error("Error en deleteAventuraById:", error);
+    console.error(
+      `Error en deleteAventuraById(
+        ${id}
+      ): ${error.message}`.trim()
+    );
     throw error;
   }
 }
 
 async function validateIdAventura(id) {
-  return (
-    (await conn.query("SELECT 1 FROM aventura WHERE id = $1 LIMIT 1", [id]))
-      .rowCount !== 0
-  );
+  try {
+    return (
+      (await conn.query("SELECT 1 FROM aventura WHERE id = $1 LIMIT 1", [id]))
+        .rowCount !== 0
+    );
+  } catch (error) {
+    console.log(
+      `Error en validateIdAventura(
+      ${id}
+      ): ${error.message}`.trim()
+    );
+    throw error;
+  }
 }
 
 export default {
