@@ -377,6 +377,65 @@ async function guardarOpcion(e) {
 }
 
 /*
+ * Borra un capítulo por número y lo elimina del estado y UI
+ */
+async function borrarCapitulo(numeroCapitulo) {
+  try {
+    const capitulo = estado.libro.capitulos.find(c => c.numero === numeroCapitulo);
+    if (!capitulo) {
+      mostrarAlerta("Capítulo no encontrado");
+      return;
+    }
+
+    if (!confirm(`¿Seguro que querés borrar el capítulo ${numeroCapitulo}?`)) {
+      return;
+    }
+
+    const response = await fetch(
+      `${config.apiBaseUrl}/aventura/${estado.libro.id}/${capitulo.numero}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          auth: {
+            id: estado.libro.usuario.id,
+            contrasenia: estado.libro.usuario.contrasenia
+          }
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al borrar capítulo en backend");
+    }
+
+    // Sacarlo del estado local
+    estado.libro.capitulos = estado.libro.capitulos.filter(c => c.numero !== numeroCapitulo);
+
+    // Ajustar capituloActual
+    if (estado.capituloActual >= estado.libro.capitulos.length) {
+      estado.capituloActual = estado.libro.capitulos.length - 1;
+    }
+
+    // Si quedan capítulos, cargamos el nuevo actual, si no, limpiamos
+    if (estado.capituloActual >= 0) {
+      cargarCapituloEnEditor(estado.libro.capitulos[estado.capituloActual]);
+    } else {
+      document.getElementById("titulo").value = "";
+      document.getElementById("contenido").value = "";
+      document.getElementById("opcionesContainer").innerHTML = "<h3 class='font-Lato'>Opciones del capítulo:</h3>";
+    }
+
+    actualizarUI();
+    mostrarAlerta("Capítulo borrado correctamente");
+
+  } catch (error) {
+    console.error("Error en borrarCapitulo:", error);
+    mostrarAlerta("Error al borrar capítulo");
+  }
+}
+
+/*
   Crea una opción en el backend
  */
 async function crearOpcion(opcion) {
@@ -495,13 +554,21 @@ function actualizarUI() {
   // Agregar capítulos existentes
   estado.libro.capitulos.forEach((capitulo, index) => {
     const li = document.createElement("li");
-    li.textContent = `Capítulo ${capitulo.numero}: ${capitulo.titulo || "Sin título"}`;
-    li.classList.toggle("activo", estado.capituloActual === index);
-    li.addEventListener("click", () => {
+    li.innerHTML = `
+    <span>Capítulo ${capitulo.numero}: ${capitulo.titulo || "Sin título"}</span>
+    <button class="btn-borrar-capitulo" title="Borrar capítulo">Borrar</button>
+    `;
+    li.querySelector("span").addEventListener("click", () => {
       estado.capituloActual = index;
       cargarCapituloEnEditor(capitulo);
       actualizarUI();
     });
+    li.querySelector(".btn-borrar-capitulo").addEventListener("click", async (e) => {
+    e.stopPropagation(); 
+    if (confirm(`¿Querés borrar el capítulo ${capitulo.numero}? Esto no se puede deshacer.`)) {
+      await borrarCapitulo(capitulo.numero);
+    }
+  });
     listaCapitulos.appendChild(li);
   });
   
