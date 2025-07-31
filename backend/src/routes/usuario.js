@@ -102,14 +102,19 @@ router.put("/:id_usuario", async (req, res) => {
     const id_usuario = req.params.id_usuario;
     console.log(`id_usuario: ${id_usuario}`);
 
-    if (id_usuario != req.body.auth.id) {
-      res.status(400).send("La id de usuario en la URI y en auth no coinciden");
+    const auth = req.body.auth;
+    console.log(`auth: ${JSON.stringify(auth)}`);
+
+    if (id_usuario != auth.id) {
+      const MESSAGE = "La id de usuario en la URI y en auth no coinciden";
+      console.log(MESSAGE);
+      res.status(400).send(MESSAGE);
       return;
     }
 
     const autorizado = await usuario_service.validateContrasenia(
-      req.body.auth.id,
-      req.body.auth.contrasenia
+      auth.id,
+      auth.contrasenia
     );
     console.log(`Autorizado: ${autorizado}`);
 
@@ -143,14 +148,19 @@ router.delete("/:id_usuario", async (req, res) => {
     const id_usuario = req.params.id_usuario;
     console.log(`id_usuario: ${id_usuario}`);
 
-    if (id_usuario != req.body.auth.id) {
-      res.status(400).send("La id de usuario en la URI y en auth no coinciden");
+    const auth = req.body.auth;
+    console.log(`auth: ${JSON.stringify(auth)}`);
+
+    if (id_usuario != auth.id) {
+      const MESSAGE = "La id de usuario en la URI y en auth no coinciden";
+      console.log(MESSAGE);
+      res.status(400).send(MESSAGE);
       return;
     }
 
     const autorizado = await usuario_service.validateContrasenia(
-      req.body.auth.id,
-      req.body.auth.contrasenia
+      auth.id,
+      auth.contrasenia
     );
     console.log(`Autorizado: ${autorizado}`);
 
