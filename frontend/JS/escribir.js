@@ -290,7 +290,7 @@ function cargarCapituloEnEditor(capitulo) {
       card.className = "card-opcion";
       card.innerHTML = `
         <p>${opcion.descripcion}</p>
-        <a>Ir a página: ${opcion.numero_pagina_final}</a>
+        <a>Ir a página: ${opcion.numero_pagina_destino}</a>
         <button class="btn-eliminar-opcion" data-id="${opcion.id}">Eliminar</button>
       `;
       opcionesContainer.appendChild(card);
@@ -343,7 +343,7 @@ async function guardarOpcion() {
   const nuevaOpcion = {
     descripcion: mensaje,
     numero_pagina_origen: capituloActual.numero,
-    numero_pagina_final: parseInt(redireccion)
+    numero_pagina_destino: parseInt(redireccion)
   };
   
   try {
@@ -378,7 +378,7 @@ async function crearOpcion(opcion) {
           contrasenia: estado.libro.usuario.contrasenia
         },
         descripcion: opcion.descripcion,
-        numero_pagina_destino: opcion.numero_pagina_final
+        numero_pagina_destino: opcion.numero_pagina_destino
       })
     }
   );
