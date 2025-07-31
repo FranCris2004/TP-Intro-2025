@@ -46,14 +46,15 @@ async function getAllOpcionesByPaginaNumero(numero_pagina_origen, id_aventura) {
     if (res.rowCount === 0)
       throw new Error("Fallo al optener las opciones de la pagina");
 
-    return res.rows.map((row) =>
-      Opcion(
-        row.id,
-        row.descripcion,
-        row.id_aventura,
-        row.numero_pagina_origen,
-        row.numero_pagina_destino
-      )
+    return res.rows.map(
+      (row) =>
+        new Opcion(
+          row.id,
+          row.descripcion,
+          row.id_aventura,
+          row.numero_pagina_origen,
+          row.numero_pagina_destino
+        )
     );
   } catch (error) {
     console.error("Error en getAllOpcionesByPaginaId", error);
