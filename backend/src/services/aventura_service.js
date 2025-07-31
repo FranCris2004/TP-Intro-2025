@@ -24,15 +24,7 @@ async function createAventura(titulo, descripcion, autor_id, genero, portada) {
       res.rows[0].portada
     );
   } catch (error) {
-    console.error(
-      `Error en createAventura(
-        ${titulo},
-        ${descripcion},
-        ${autor_id},
-        ${genero},
-        ${portada}
-      ): ${error.message}`.trim()
-    );
+    console.error("Error en createAventura:", error);
     throw error;
   }
 }
@@ -44,27 +36,9 @@ async function createAventura(titulo, descripcion, autor_id, genero, portada) {
 async function getAllAventuras() {
   try {
     const res = await conn.query("SELECT * FROM aventura");
-<<<<<<< HEAD
-
-    return res.rows.map(
-      (row) =>
-        new Aventura(
-          row.id,
-          row.titulo,
-          row.descripcion,
-          row.autor_id,
-          row.genero,
-          row.fecha_creacion,
-          row.portada
-        )
-    );
-  } catch (error) {
-    console.error(`Error en getAllAventuras(): ${error.message}`);
-=======
     return res.rows.map(row => new Aventura(...Object.values(row)));
   } catch (error) {
     console.error("Error en getAllAventuras:", error);
->>>>>>> 27fd7e1 (ya funciona crear aventura y agregar capitulos (aun falta terminar y pulir algunas cosas))
     throw error;
   }
 }
@@ -85,7 +59,7 @@ async function getAventuraById(id) {
       res.rows[0].portada
     );
   } catch (error) {
-    console.error(`Error en getAventuraById(${id}): ${error.message}`);
+    console.error("Error en getAventuraById:", error);
     throw error;
   }
 }
@@ -140,16 +114,7 @@ async function updateAventuraById(
 
     return getAventuraById(id);
   } catch (error) {
-    console.error(
-      `Error en updateAventuraById(
-        ${id},
-        ${titulo},
-        ${descripcion},
-        ${autor_id},
-        ${genero},
-        ${portada}
-      ): ${error.message}`.trim()
-    );
+    console.error("Error en updateAventuraById:", error);
     throw error;
   }
 }
@@ -167,30 +132,17 @@ async function deleteAventuraById(id) {
     }
 
   } catch (error) {
-    console.error(
-      `Error en deleteAventuraById(
-        ${id}
-      ): ${error.message}`.trim()
-    );
+    console.error("Error en deleteAventuraById:", error);
     throw error;
   }
 }
 
 
 async function validateIdAventura(id) {
-  try {
-    return (
-      (await conn.query("SELECT 1 FROM aventura WHERE id = $1 LIMIT 1", [id]))
-        .rowCount !== 0
-    );
-  } catch (error) {
-    console.log(
-      `Error en validateIdAventura(
-      ${id}
-      ): ${error.message}`.trim()
-    );
-    throw error;
-  }
+  return (
+    (await conn.query("SELECT 1 FROM aventura WHERE id = $1 LIMIT 1", [id]))
+      .rowCount !== 0
+  );
 }
 
 export default {

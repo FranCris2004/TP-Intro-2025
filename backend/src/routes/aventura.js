@@ -75,9 +75,10 @@ router.post("/:id_aventura/pagina", async (req, res) => {
       contenido,
       imagen
     );
-    console.log(`Response: ${JSON.stringify(nueva_pagina)}`);
 
-    res.status(200).send(nueva_pagina);
+    console.log(`Response:`, nueva_pagina);
+    return res.json(nueva_pagina);
+
   } catch (error) {
     console.error("Error en POST /pagina:", error);
     return res.status(500).json({ error: "Error al crear la pagina" });
@@ -118,15 +119,16 @@ router.post("/:id_aventura/:numero_pagina/opcion", async (req, res) => {
       `
     );
 
-    const nueva_opcion = opcion_service.createOpcion(
-      id_aventura,
-      descripcion,
-      numero_pagina,
-      numero_pagina_destino
+    const nueva_opcion = await opcion_service.createOpcion(
+      descripcion,           
+      numero_pagina,         
+      numero_pagina_destino, 
+      id_aventura          
     );
-    console.log(`Response: ${JSON.stringify(nueva_opcion)}`);
 
-    res.status(200).send(nueva_opcion);
+    console.log(`Response: ${nueva_opcion}`);
+
+    res.send(nueva_opcion);
   } catch (error) {
     res.status(500).json("Error al crear la opcion");
   }
@@ -141,9 +143,9 @@ router.get("/:id_aventura", async (req, res) => {
     console.log(`id_aventura: ${id_aventura}`);
 
     const aventura = aventura_service.getAventuraById(id_aventura);
-    console.log(`Response: ${JSON.stringify(aventura)}`);
+    console.log(`Response: ${aventura}`);
 
-    res.status(200).send(aventura);
+    res.send(aventura);
   } catch (error) {
     res.status(500).json("Error al obtener la aventura");
   }
@@ -161,9 +163,9 @@ router.get("/:id_aventura/:numero_pagina", async (req, res) => {
     console.log(`numero_pagina: ${numero_pagina}`);
 
     const pagina = pagina_service.getPaginaByNumero(id_aventura, numero_pagina);
-    console.log(`Response: ${JSON.stringify(pagina)}`);
+    console.log(`Response: ${pagina}`);
 
-    res.status(200).send(pagina);
+    res.send(pagina);
   } catch (error) {
     res.status(500).json("Error al obtener la pagina");
   }
@@ -186,9 +188,9 @@ router.get("/:id_aventura/:numero_pagina/opciones", async (req, res) => {
       id_aventura,
       numero_pagina
     );
-    console.log(`Response: ${JSON.stringify(opciones)}`);
+    console.log(`Response: ${opciones}`);
 
-    res.status(200).send(opciones);
+    res.send(opciones);
   } catch (error) {
     res.status(500).json("Error al obtener las opciones de la pagina");
   }
@@ -231,7 +233,7 @@ router.put("/:id_aventura", async (req, res) => {
       genero,
       portada
     );
-    console.log(`Response: ${JSON.stringify(aventura_actualizada)}`);
+    console.log(`Response: ${aventura_actualizada}`);
 
     res.status(200).send(aventura_actualizada);
   } catch (error) {
@@ -267,9 +269,8 @@ router.put("/:id_aventura/:numero_pagina", async (req, res) => {
       contenido,
       imagen
     );
-    console.log(`Response: ${JSON.stringify(pagina_actualizada)}`);
 
-    res.status(200).send(pagina_actualizada);
+    res.send(pagina_actualizada);
   } catch (error) {
     console.error("Error en PUT /:id_aventura/:numero_pagina:", error);
     res.status(500).json("Error al actualizar la página");
@@ -316,9 +317,9 @@ router.put("/:id_aventura/:numero_pagina/:id_opcion", async (req, res) => {
       descripcion,
       numero_pagina_destino
     );
-    console.log(`Response: ${JSON.stringify(opcion_actualizada)}`);
+    console.log(`Response: ${opcion_actualizada}`);
 
-    res.status(200).send(opcion_actualizada);
+    res.send(opcion_actualizada);
   } catch (error) {
     res.status(500).json("Error al crear la opcion");
   }

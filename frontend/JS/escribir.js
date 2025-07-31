@@ -1,3 +1,16 @@
+/*
+ * Sistema de Escritura de Historias Interactivas
+ * 
+ * Este script maneja:
+ * - Creación/edición de libros (aventuras)
+ * - Gestión de capítulos (páginas)
+ * - Sistema de opciones/decisiones
+ * - Conexión con backend API
+ */
+
+
+// 1. ESTADO GLOBAL Y CONFIGURACIÓN
+
 const config = {
   apiBaseUrl: 'http://localhost:3000/v1'
 };
@@ -84,6 +97,7 @@ async function manejarBotonSiguiente() {
     mostrarAlerta("Por favor completá el título y seleccioná una categoría.");
     return;
   }
+
   // Actualizar estado
   estado.libro = {
     ...estado.libro,
@@ -290,7 +304,7 @@ function cargarCapituloEnEditor(capitulo) {
       card.className = "card-opcion";
       card.innerHTML = `
         <p>${opcion.descripcion}</p>
-        <a>Ir a página: ${opcion.numero_pagina_final}</a>
+        <a>Ir a página: ${opcion.numero_pagina_destino}</a>
         <button class="btn-eliminar-opcion" data-id="${opcion.id}">Eliminar</button>
       `;
       opcionesContainer.appendChild(card);
@@ -329,34 +343,33 @@ function ocultarFormularioOpcion() {
 /*
   Guarda una nueva opción
  */
-async function guardarOpcion() {
+async function guardarOpcion(e) {
+  if (e) e.preventDefault(); // por si la llaman desde un submit
+
   const mensaje = document.getElementById("mensajeOpcion").value.trim();
   const redireccion = document.getElementById("redirigirOpcion").value.trim();
-  
+
   if (!mensaje || !redireccion) {
     mostrarAlerta("¡Completá ambos campos!");
     return;
   }
-  
+
   const capituloActual = estado.libro.capitulos[estado.capituloActual];
-  
+
   const nuevaOpcion = {
-    descripcion: mensaje,
+    descripcion: mensaje, // ya está trim arriba
     numero_pagina_origen: capituloActual.numero,
-    numero_pagina_final: parseInt(redireccion)
+    numero_pagina_destino: parseInt(redireccion)
   };
-  
+
   try {
     const opcionCreada = await crearOpcion(nuevaOpcion);
-    
-    // Actualizar estado
+
     if (!capituloActual.opciones) capituloActual.opciones = [];
     capituloActual.opciones.push(opcionCreada);
-    
-    // Actualizar UI
+
     cargarCapituloEnEditor(capituloActual);
     ocultarFormularioOpcion();
-    
   } catch (error) {
     console.error("Error al guardar opción:", error);
     mostrarAlerta("Error al guardar la opción. Por favor intentá nuevamente.");
@@ -377,8 +390,9 @@ async function crearOpcion(opcion) {
           id: estado.libro.usuario.id,
           contrasenia: estado.libro.usuario.contrasenia
         },
-        descripcion: opcion.descripcion,
-        numero_pagina_destino: opcion.numero_pagina_final
+        id_aventura: estado.libro.id,
+        descripcion: String(opcion.descripcion).trim(),
+        numero_pagina_destino: opcion.numero_pagina_destino
       })
     }
   );
@@ -613,5 +627,6 @@ async function actualizarCapitulo(capitulo) {
 }
 
 
+// INICIALIZACIÓN DE LA APLICACIÓN
 
 document.addEventListener("DOMContentLoaded", inicializar);

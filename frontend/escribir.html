@@ -59,7 +59,7 @@
             </div>
         </div>
     </div>
-    <div class="editor-container">
+    <div class="editor-container" style="display: none;">
         <aside class="sidebar">
             <h2 class="encabezado-sidebar font-Lato" id="encabezado-sidebar"></h2>
             <ul class="lista-capitulos">
@@ -90,11 +90,11 @@
                 <input type="text" id="mensajeOpcion" placeholder="Mensaje de la opción (ej: Entrar al bosque)" />
                 <a>A que capitulo redirigue esta opcion:</a>
                 <input type="number" id="redirigirOpcion" placeholder="Redirigir a (ej: 6)" />
-                <button class="btn gr btn-verde btn-simple" onclick="aceptarOpcion()">Aceptar</button>
+                <button class="btn gr btn-verde btn-simple" onclick="guardarOpcion()">Aceptar</button>
                 <button class="btn gr btn-gris btn-simple" onclick="">Cancelar</button>
             </div>
 
-            <a id="botonAgregarOpcion" class="btn gr btn-simple btn-verde " onclick="mostrarFormulario()">
+            <a id="botonAgregarOpcion" class="btn gr btn-simple btn-verde " onclick="mostrarFormularioOpcion()">
                 <span>+ Agregar opción</span>
             </a>
             </div>
@@ -105,7 +105,7 @@
     <div id="alerta" class="alerta-centro gr sb-negra font-Lato" style="display: none;">
         <p id="mensajeAlerta"></p>
     </div>
-    <script>
+    <!-- <script>
         document.getElementById("boton-siguiente").addEventListener("click", function () {
             const titulo = document.querySelector(".input[type='text']").value.trim();
             const categoria = document.getElementById("categoria").value.trim();
@@ -150,7 +150,7 @@
         });
         });
 
-    </script>
+    </script> -->
     <script src="./JS/escribir.js"></script>
 
 </body>
