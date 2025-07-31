@@ -5,41 +5,45 @@ import Opcion from "../models/opcion.js";
 //
 // Create
 //
-
 async function createPagina(
-  titulo,
   id_aventura,
+  numero,
+  titulo,
   contenido,
-  imagen
+  imagen = null
 ) {
   try {
-    if (!id_aventura) throw new Error("El id de la aventura es invalido");
+    if (!Number.isInteger(id_aventura) || id_aventura <= 0)
+      throw new Error("El id de la aventura es invalido");
 
-    if (titulo === "") throw new Error("El titulo debe ser un string no vacio");
+    if (!Number.isInteger(numero) || numero <= 0)
+      throw new Error("El número de página debe ser un entero positivo");
 
-    if (contenido === "")
-      throw new Error("El contenido debe ser un string no vacio");
+    if (typeof titulo !== "string" || titulo.trim() === "")
+      throw new Error("El titulo debe ser un string no vacío");
 
-    if (imagen === "")
+    if (typeof contenido !== "string" || contenido.trim() === "")
+      throw new Error("El contenido debe ser un string no vacío");
+
+    if (imagen !== null && typeof imagen !== "string")
       throw new Error("Imagen inválida: debe ser string o null");
 
     const res = await conn.query(
-      "INSERT INTO paginas (id_aventura, titulo, contenido, imagen) VALUES ($1, $2, $3, $4) RETURNING *",
-      [id_aventura, titulo, contenido, imagen]
+      `INSERT INTO pagina (id_aventura, numero, titulo, contenido, imagen)
+       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [id_aventura, numero, titulo.trim(), contenido.trim(), imagen]
     );
-    return new Pagina(
-      res.rows[0].id,
-      res.rows[0].numero,
-      res.rows[0].titulo,
-      res.rows[0].id_aventura,
-      res.rows[0].contenido,
-      res.rows[0].imagen
-    );
+
+    const { id, id_aventura: idAv, numero: num, titulo: tit, contenido: cont, imagen: img } = res.rows[0];
+    
+    return new Pagina(id, idAv, num, tit, cont, img);
+
   } catch (error) {
     console.error("Error en createPagina:", error);
     throw error;
   }
 }
+
 
 //
 // Read
@@ -123,32 +127,64 @@ async function validateIdPagina(id) {
   );
 }
 
-async function updatePaginaById(
-  id,
-  titulo = null,
-  contenido = null,
-  imagen = null
-) {
+async function updatePaginaById(id, titulo = null, contenido = null, imagen = null) {
   try {
-    if (!id) throw new Error("ID de pagina requerido");
+    // Validación mejorada del ID
+    if (!id || isNaN(parseInt(id))) {
+      throw new Error("ID de página inválido: debe ser un número");
+    }
+    id = parseInt(id);
 
-    if (validateIdPagina(id) == false) throw new Error("Pagina no encontrado");
+    // Verificar existencia
+    if (!(await validateIdPagina(id))) {
+      throw new Error(`Página con ID ${id} no encontrada`);
+    }
 
-    if (titulo)
-      await conn.query("UPDATE pagina SET titulo = $2 WHERE id = $1", [id, titulo]);
+    // Construir consulta dinámica
+    const updates = [];
+    const params = [id];
+    let paramIndex = 2; // $1 es el id
 
-    if (contenido)
-      await conn.query("UPDATE pagina SET contenido = $2 WHERE id = $1", [
-        id,
-        contenido,
-      ]);
+    if (titulo !== null) {
+      if (typeof titulo !== "string" || titulo.trim() === "") {
+        throw new Error("Título inválido: debe ser string no vacío");
+      }
+      updates.push("titulo = $" + paramIndex);
+      params.push(titulo.trim());
+      paramIndex++;
+    }
 
-    if (imagen)
-      await conn.query("UPDATE pagina SET imagen = $2 WHERE id = $1", [id, imagen]);
+    if (contenido !== null) {
+      if (typeof contenido !== "string" || contenido.trim() === "") {
+        throw new Error("Contenido inválido: debe ser string no vacío");
+      }
+      updates.push("contenido = $" + paramIndex);
+      params.push(contenido.trim());
+      paramIndex++;
+    }
 
-    return getPaginaById(id);
+    if (imagen !== null) {
+      if (typeof imagen !== "string") {
+        throw new Error("Imagen inválida: debe ser string o null");
+      }
+      updates.push("imagen = $" + paramIndex);
+      params.push(imagen);
+      paramIndex++;
+    }
+
+    // Si hay campos para actualizar
+    if (updates.length > 0) {
+      await conn.query(
+        `UPDATE pagina SET ${updates.join(", ")} WHERE id = $1`,
+        params
+      );
+    }
+
+    // Retornar la página actualizada
+    return await getPaginaById(id);
+
   } catch (error) {
-    console.error("Error en updatePaginaById:", error);
+    console.error(`Error en updatePaginaById [ID:${id}]:`, error);
     throw error;
   }
 }
@@ -158,37 +194,78 @@ async function validatePaginaByNumero(id_aventura, numero) {
 }
 
 
-
 async function updatePaginaByNumero(id_aventura, numero, titulo = null, contenido = null, imagen = null) {
   try {
-    if (!id_aventura || !numero)
-      throw new Error("id_aventura y numero de página son requeridos");
+    if (!id_aventura || isNaN(parseInt(id_aventura))) {
+      throw new Error("id_aventura debe ser un número válido");
+    }
+    id_aventura = parseInt(id_aventura);
 
-    if (await validatePaginaByNumero(id_aventura, numero) === false)
-      throw new Error("Página no encontrada");
-    if (titulo)
-      await conn.query("UPDATE pagina SET titulo = $3 WHERE id_aventura = $1 AND numero = $2", [id_aventura, numero, titulo]);
+    if (!numero || isNaN(parseInt(numero))) {
+      throw new Error("numero de página debe ser un número válido");
+    }
+    numero = parseInt(numero);
 
-    if (contenido)
-      await conn.query("UPDATE pagina SET contenido = $3 WHERE id_aventura = $1 AND numero = $2", [id_aventura, numero, contenido]);
+    if (!(await validatePaginaByNumero(id_aventura, numero))) {
+      throw new Error(`Página no encontrada (Aventura: ${id_aventura}, Número: ${numero})`);
+    }
 
-    if (imagen)
-      await conn.query("UPDATE pagina SET imagen = $3 WHERE id_aventura = $1 AND numero = $2", [id_aventura, numero, imagen]);
+    const updates = [];
+    const params = [id_aventura, numero];
+    let paramIndex = 3;
+
+    if (titulo !== null) {
+      if (typeof titulo !== "string" || titulo.trim() === "") {
+        throw new Error("Título inválido: debe ser string no vacío");
+      }
+      updates.push(`titulo = $${paramIndex}`);
+      params.push(titulo.trim());
+      paramIndex++;
+    }
+
+    if (contenido !== null) {
+      if (typeof contenido !== "string" || contenido.trim() === "") {
+        throw new Error("Contenido inválido: debe ser string no vacío");
+      }
+      updates.push(`contenido = $${paramIndex}`);
+      params.push(contenido.trim());
+      paramIndex++;
+    }
+
+    if (imagen !== null) {
+      if (typeof imagen !== "string") {
+        throw new Error("Imagen inválida: debe ser string o null");
+      }
+      updates.push(`imagen = $${paramIndex}`);
+      params.push(imagen);
+      paramIndex++;
+    }
+
+    if (updates.length > 0) {
+      await conn.query(
+        `UPDATE pagina SET ${updates.join(", ")} 
+         WHERE id_aventura = $1 AND numero = $2`,
+        params
+      );
+    }
 
     const res = await conn.query(
       "SELECT * FROM pagina WHERE id_aventura = $1 AND numero = $2",
       [id_aventura, numero]
     );
 
+    const row = res.rows[0];
     return new Pagina(
-      res.rows[0].id,
-      res.rows[0].titulo,
-      res.rows[0].id_aventura,
-      res.rows[0].contenido,
-      res.rows[0].imagen
+      row.id,
+      row.id_aventura,
+      row.numero,
+      row.titulo,
+      row.contenido,
+      row.imagen
     );
+
   } catch (error) {
-    console.error("Error en updatePaginaByNumero:", error);
+    console.error(`Error en updatePaginaByNumero [Aventura:${id_aventura}, Número:${numero}]:`, error);
     throw error;
   }
 }

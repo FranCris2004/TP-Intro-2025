@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   sinHistorias.style.display = "none";
 
   try {
-    // Simular usuario logueado si no hay
     if (!localStorage.getItem("usuario")) {
       localStorage.setItem("usuario", JSON.stringify({ id: 1, nombre: "Ana García", usuario: "ana" }));
     }

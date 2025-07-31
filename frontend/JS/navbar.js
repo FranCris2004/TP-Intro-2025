@@ -9,8 +9,7 @@ fetch('navbar.html')
   .then(data => {
     document.getElementById('navbar-container').innerHTML = data;
 
-    // 👇 Acá es cuando tenés que volver a llamar a mostrarUsuario()
-    evalScripts(data); // Para que los scripts embebidos en navbar.html se ejecuten
+    evalScripts(data); 
 
     if (typeof mostrarUsuario === 'function') {
       mostrarUsuario();

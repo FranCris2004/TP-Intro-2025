@@ -44,6 +44,7 @@ async function createAventura(titulo, descripcion, autor_id, genero, portada) {
 async function getAllAventuras() {
   try {
     const res = await conn.query("SELECT * FROM aventura");
+<<<<<<< HEAD
 
     return res.rows.map(
       (row) =>
@@ -59,6 +60,11 @@ async function getAllAventuras() {
     );
   } catch (error) {
     console.error(`Error en getAllAventuras(): ${error.message}`);
+=======
+    return res.rows.map(row => new Aventura(...Object.values(row)));
+  } catch (error) {
+    console.error("Error en getAllAventuras:", error);
+>>>>>>> 27fd7e1 (ya funciona crear aventura y agregar capitulos (aun falta terminar y pulir algunas cosas))
     throw error;
   }
 }
@@ -151,12 +157,15 @@ async function updateAventuraById(
 //
 // Delete
 //
-
 async function deleteAventuraById(id) {
   try {
+    await conn.query("DELETE FROM pagina WHERE id_aventura = $1", [id]);
     const res = await conn.query("DELETE FROM aventura WHERE id = $1", [id]);
 
-    if (res.rowCount === 0) throw new Error("Aventura no encontrada");
+    if (res.rowCount === 0) {
+      throw new Error("Aventura no encontrada");
+    }
+
   } catch (error) {
     console.error(
       `Error en deleteAventuraById(
@@ -166,6 +175,7 @@ async function deleteAventuraById(id) {
     throw error;
   }
 }
+
 
 async function validateIdAventura(id) {
   try {

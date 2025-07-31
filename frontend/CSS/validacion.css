@@ -144,15 +144,14 @@ form a:hover {
   width: 200%;
 }
 .mensaje-error {
-    color: #e63946;
-    background-color: #ffe5e5;
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    display: none;
+  display: none;
+  color: #e63946;
+  background-color: #ffe5e5;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  margin-top: 10px;
 }
-
 @media (max-width:850px){
 	body{
   		background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%);
