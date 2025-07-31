@@ -177,7 +177,6 @@ document.querySelector("#form-registro form").addEventListener("submit", async (
     mostrarMensaje(mensaje, errorDiv);  
   }
 });
-
 document.querySelector("#form-login form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -221,11 +220,8 @@ document.querySelector("#form-login form").addEventListener("submit", async (e) 
 
     const usuario = await respuesta.json();
     console.log("Usuario logueado:", usuario);
-
-    // Redirigir a página principal o guardar en localStorage
-    // Por ejemplo:
     localStorage.setItem("usuario", JSON.stringify(usuario));
-    window.location.href = "index.html"; // O donde quieras redirigir
+    window.location.href = "index.html"; 
 
   } catch (error) {
     console.error("Error en login:", error);

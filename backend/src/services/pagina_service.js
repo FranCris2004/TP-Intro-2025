@@ -5,41 +5,45 @@ import Opcion from "../models/opcion.js";
 //
 // Create
 //
-
 async function createPagina(
-  titulo,
   id_aventura,
+  numero,
+  titulo,
   contenido,
-  imagen
+  imagen = null
 ) {
   try {
-    if (!id_aventura) throw new Error("El id de la aventura es invalido");
+    if (!Number.isInteger(id_aventura) || id_aventura <= 0)
+      throw new Error("El id de la aventura es invalido");
 
-    if (titulo === "") throw new Error("El titulo debe ser un string no vacio");
+    if (!Number.isInteger(numero) || numero <= 0)
+      throw new Error("El número de página debe ser un entero positivo");
 
-    if (contenido === "")
-      throw new Error("El contenido debe ser un string no vacio");
+    if (typeof titulo !== "string" || titulo.trim() === "")
+      throw new Error("El titulo debe ser un string no vacío");
 
-    if (imagen === "")
+    if (typeof contenido !== "string" || contenido.trim() === "")
+      throw new Error("El contenido debe ser un string no vacío");
+
+    if (imagen !== null && typeof imagen !== "string")
       throw new Error("Imagen inválida: debe ser string o null");
 
     const res = await conn.query(
-      "INSERT INTO paginas (id_aventura, titulo, contenido, imagen) VALUES ($1, $2, $3, $4) RETURNING *",
-      [id_aventura, titulo, contenido, imagen]
+      `INSERT INTO pagina (id_aventura, numero, titulo, contenido, imagen)
+       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [id_aventura, numero, titulo.trim(), contenido.trim(), imagen]
     );
-    return new Pagina(
-      res.rows[0].id,
-      res.rows[0].numero,
-      res.rows[0].titulo,
-      res.rows[0].id_aventura,
-      res.rows[0].contenido,
-      res.rows[0].imagen
-    );
+
+    const { id, id_aventura: idAv, numero: num, titulo: tit, contenido: cont, imagen: img } = res.rows[0];
+    
+    return new Pagina(id, idAv, num, tit, cont, img);
+
   } catch (error) {
     console.error("Error en createPagina:", error);
     throw error;
   }
 }
+
 
 //
 // Read

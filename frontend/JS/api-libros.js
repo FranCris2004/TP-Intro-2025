@@ -234,7 +234,7 @@ function mostrarLibros(aventuras, usuarios) {
   container.innerHTML = "";
 
   aventuras.forEach((aventura) => {
-    const usuario = usuarios.find(u => u.id == aventura.id_usuario);
+    const usuario = usuarios.find(u => u.id == aventura.autor_id);
     const nombreAutor = usuario ? usuario.nombre : "Autor desconocido";
     const portada = aventura.portada || portada_defecto;
 

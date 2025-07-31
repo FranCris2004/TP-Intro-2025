@@ -61,21 +61,15 @@
     </div>
     <div class="editor-container">
         <aside class="sidebar">
-            <div class="volver">
-                <span onclick="history.back()" class="material-symbols-outlined">arrow_back_ios</span>
-                <!-- history.back() sirve para volver atrás -->
-            </div>
-            <h2 class="encabezado-sidebar">Capitulos:</h2>
+            <h2 class="encabezado-sidebar font-Lato" id="encabezado-sidebar"></h2>
             <ul class="lista-capitulos">
-            <li><button id="agregar-capitulo">+ Agregar capítulo</button></li>
+            <li><button id="agregar-capitulo" class="btn gr btn-simple btn-verde">+ Agregar capítulo</button></li>
             </ul>
         </aside>
         <main class="area-principal">
-            
             <div class="barra-superior">
-            <a class="btn-guardar btn gr btn-curvo cb-verde">Guardar</a>
+            <a class="btn-guardar btn gr btn-simple btn-verde">Guardar</a>
             </div>
-
             <div class="subida-imagen upload-container">
                 <img src="./imagenes/image-combiner-svgrepo-com.svg" class="icon-imagen">
                 <input type="file" accept="image/*" class="file-input" style="display: none;">
@@ -88,16 +82,19 @@
             <hr>
             
             <div class="opciones-container" id="opcionesContainer">
-                <h3 class="font-Lato">Opciones del camino</h3>
+                <h3 class="font-Lato">Opciones del capitulo:</h3>
             </div>
 
             <div class="formulario-opcion" id="formularioOpcion" style="display: none;">
+                <a>Describe la opcion:</a>
                 <input type="text" id="mensajeOpcion" placeholder="Mensaje de la opción (ej: Entrar al bosque)" />
+                <a>A que capitulo redirigue esta opcion:</a>
                 <input type="number" id="redirigirOpcion" placeholder="Redirigir a (ej: 6)" />
-                <button class="btn gr btn-gris btn-simple" onclick="aceptarOpcion()">Aceptar</button>
+                <button class="btn gr btn-verde btn-simple" onclick="aceptarOpcion()">Aceptar</button>
+                <button class="btn gr btn-gris btn-simple" onclick="">Cancelar</button>
             </div>
 
-            <a id="botonAgregarOpcion" class="btn gr btn-verde btn-simple btn-icon" onclick="mostrarFormulario()">
+            <a id="botonAgregarOpcion" class="btn gr btn-simple btn-verde " onclick="mostrarFormulario()">
                 <span>+ Agregar opción</span>
             </a>
             </div>
@@ -108,7 +105,6 @@
     <div id="alerta" class="alerta-centro gr sb-negra font-Lato" style="display: none;">
         <p id="mensajeAlerta"></p>
     </div>
-<!-- script para cambiar de datos principales a escribir capitulo -->
     <script>
         document.getElementById("boton-siguiente").addEventListener("click", function () {
             const titulo = document.querySelector(".input[type='text']").value.trim();
@@ -127,8 +123,36 @@
             document.querySelector(".editor-container").style.display = "none";
         });
     </script>
-<!-- Script para agregar opciones -->
     <script>
+        let portada = ""; 
+
+        document.querySelectorAll(".upload-container").forEach(container => {
+        const trigger = container.querySelector(".upload-btn") || container;
+        const inputFile = container.querySelector(".file-input");
+        const imgPreview = container.querySelector("img");
+
+        if (!trigger || !inputFile || !imgPreview) return;
+
+        trigger.addEventListener("click", () => {
+            inputFile.click();
+        });
+
+        inputFile.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                imgPreview.src = event.target.result;
+                portada = event.target.result; 
+            };
+            reader.readAsDataURL(file);
+            }
+        });
+        });
+
+    </script>
+<!-- Script para agregar opciones -->
+    <!-- <script>
         function mostrarFormulario() {
             document.getElementById('formularioOpcion').style.display = 'block';
             document.getElementById('botonAgregarOpcion').style.display = 'none';
@@ -159,20 +183,28 @@
             document.getElementById('botonAgregarOpcion').style.display = 'block';
         }
         function mostrarAlerta(mensaje) {
-                const alerta = document.getElementById('alerta');
-                const mensajeAlerta = document.getElementById('mensajeAlerta');
+            const alerta = document.getElementById('alerta');
+            const mensajeAlerta = document.getElementById('mensajeAlerta');
 
-                mensajeAlerta.textContent = mensaje;
-                alerta.style.display = 'block';
+            mensajeAlerta.textContent = mensaje;
+            alerta.style.display = 'block';
 
-                // Opcional: ocultar la alerta automáticamente después de 3 segundos
-                setTimeout(() => {
-                    alerta.style.display = 'none';
-                }, 3000);
-            }
-    </script>
+            // Opcional: ocultar la alerta automáticamente después de 3 segundos
+            setTimeout(() => {
+                alerta.style.display = 'none';
+            }, 3000);
+        }
+    </script>  -->
+
+
+
+
+
+
+
+
     <!-- Script para subir imagen -->
-    <script>
+    <!-- <script>
        // Subida de imagen del capítulo
 document.querySelectorAll(".upload-container").forEach(container => {
   const trigger = container.querySelector(".upload-btn") || container;
@@ -198,7 +230,7 @@ document.querySelectorAll(".upload-container").forEach(container => {
       reader.readAsDataURL(file);
     }
   });
-});
+}); -->
 
 
     </script>

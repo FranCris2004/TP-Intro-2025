@@ -34,20 +34,13 @@ async function createAventura(titulo, descripcion, autor_id, genero, portada) {
 //
 
 async function getAllAventuras() {
-  const res = await conn.query("SELECT * FROM aventura");
-
-  return res.rows.map(
-    (row) =>
-      new Aventura(
-        row.id,
-        row.titulo,
-        row.descripcion,
-        row.autor_id,
-        row.genero,
-        row.fecha_creacion,
-        row.portada
-      )
-  );
+  try {
+    const res = await conn.query("SELECT * FROM aventura");
+    return res.rows.map(row => new Aventura(...Object.values(row)));
+  } catch (error) {
+    console.error("Error en getAllAventuras:", error);
+    throw error;
+  }
 }
 
 async function getAventuraById(id) {
@@ -129,17 +122,21 @@ async function updateAventuraById(
 //
 // Delete
 //
-
 async function deleteAventuraById(id) {
   try {
+    await conn.query("DELETE FROM pagina WHERE id_aventura = $1", [id]);
     const res = await conn.query("DELETE FROM aventura WHERE id = $1", [id]);
 
-    if (res.rowCount === 0) throw new Error("Aventura no encontrada");
+    if (res.rowCount === 0) {
+      throw new Error("Aventura no encontrada");
+    }
+
   } catch (error) {
     console.error("Error en deleteAventuraById:", error);
     throw error;
   }
 }
+
 
 async function validateIdAventura(id) {
   return (

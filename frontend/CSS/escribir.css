@@ -198,9 +198,10 @@ hr{
 .sidebar {
   width: 20%;
   padding: 2rem 1rem;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.192);
   display: flex;
   flex-direction: column;
+  background-color: #8bd6983b;
 }
 
 .encabezado-sidebar {
@@ -235,19 +236,18 @@ hr{
 }
 
 .area-principal {
-  width: 80%;
-  padding: 2rem;
+  flex: 1;
+  padding-left: 1rem;
+  background-color: #ffffff;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
-
 .barra-superior {
   display: flex;
   justify-content: flex-end;
 }
-
+.btn-guardar{
+  margin: 1rem;
+}
 .subida-imagen {
   background-color: var(--gris);
   cursor: pointer;
@@ -257,7 +257,7 @@ hr{
 }
 
 .icon-imagen {
-  max-width: 80px;
+  max-width: 60px;
   height: auto;
 }
 
@@ -282,23 +282,29 @@ hr{
   font-size: 1rem;
   box-sizing: border-box;
 }
-
 .formulario-opcion {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--gris);
-  border-radius: 10px;
-  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff, #f5f5f5);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  animation: aparecer 0.2s ease-in-out;
 }
 
 .formulario-opcion input {
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--gris);
-  border-radius: 6px;
+  width: 700px;
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--gris);
+  border-radius: 8px;
   font-size: 1rem;
-  color: var(--negro-claro);
-  background-color: #fff;
+  font-family: 'Lato-Regular', sans-serif;
+  transition: all 0.2s ease-in-out;
+}
+
+.formulario-opcion input:focus {
+  border-color: var(--verde);
+  box-shadow: 0 0 6px rgba(0, 128, 0, 0.2);
+  outline: none;
 }
